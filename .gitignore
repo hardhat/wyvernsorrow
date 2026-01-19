@@ -1,0 +1,8 @@
+obj/
+bin/
+s
+img/*.zts
+img/*.ztp
+*.swp
+*.bak
+.vscode/
