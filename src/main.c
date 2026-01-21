@@ -135,21 +135,21 @@ void init(void)
     zvb_sound_initialize(1);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_DARK_BLUE);
-    gfx_palette_load(&ctx, terrain_palette, 32, PAL_TERRAIN);
-    gfx_palette_load(&ctx, enemies_palette, 32, PAL_ENEMIES);
-    gfx_palette_load(&ctx, npc_pc_palette, 32, PAL_NPC_PC);
-    gfx_palette_load(&ctx, bosses_palette, 32, PAL_BOSSES);
-    gfx_palette_load(&ctx, demonlord_palette, 32, PAL_DEMONLORD);
-    gfx_tileset_options options0 = {TILESET_COMP_4BIT,TILE_COLOR_TERRAIN*256,PAL_TERRAIN,0};
-    gfx_tileset_load(&ctx, terrain_tileset, 512, &options0);
-    gfx_tileset_options options1 = {TILESET_COMP_4BIT,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,0};
-    gfx_tileset_load(&ctx, enemies_tileset, 512, &options1);
-    gfx_tileset_options options2 = {TILESET_COMP_4BIT,TILE_COLOR_NPC_PC*256,PAL_NPC_PC,0};
-    gfx_tileset_load(&ctx, npc_pc_tileset, 512, &options2);
-    gfx_tileset_options options3 = {TILESET_COMP_4BIT,TILE_COLOR_BOSSES*256,PAL_BOSSES,0};
-    gfx_tileset_load(&ctx, bosses_tileset, 512, &options3);
-    gfx_tileset_options options4 = {TILESET_COMP_4BIT,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,0};
-    gfx_tileset_load(&ctx, demonlord_tileset, 512, &options4);
+    gfx_palette_load(&ctx, terrain_palette, 64, PAL_TERRAIN);
+    gfx_palette_load(&ctx, enemies_palette, 64, PAL_ENEMIES);
+    gfx_palette_load(&ctx, npc_pc_palette, 64, PAL_NPC_PC);
+    gfx_palette_load(&ctx, bosses_palette, 64, PAL_BOSSES);
+    gfx_palette_load(&ctx, demonlord_palette, 64, PAL_DEMONLORD);
+    gfx_tileset_options options0 = {0,TILE_COLOR_TERRAIN*256,PAL_TERRAIN,0};
+    gfx_tileset_load(&ctx, terrain_tileset, 256*28, &options0);
+    gfx_tileset_options options1 = {0,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,1};
+    gfx_tileset_load(&ctx, enemies_tileset, 256*9, &options1);
+    gfx_tileset_options options2 = {0,TILE_COLOR_NPC_PC*256,PAL_NPC_PC,1};
+    gfx_tileset_load(&ctx, npc_pc_tileset, 256*14, &options2);
+    gfx_tileset_options options3 = {0,TILE_COLOR_BOSSES*256,PAL_BOSSES,1};
+    gfx_tileset_load(&ctx, bosses_tileset, 256*20, &options3);
+    gfx_tileset_options options4 = {0,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
+    gfx_tileset_load(&ctx, demonlord_tileset, 256*16, &options4);
 
     // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
     clear_text_tiles(TEXT_COLOR_BLACK);
