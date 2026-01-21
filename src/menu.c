@@ -5,6 +5,7 @@
 #define TITLE_TILE 0x80
 #define MENU_TILE 0x90
 #define CHOICE_TILE 0xA0
+#define CHOICE_TILE2 0xB0
 
 #define MAX_CHOICE_TIMER 4
 
@@ -17,7 +18,7 @@ void init_menu(void)
     set_font(FONT_FLAMBOYANT);
     clear_text_tiles(COL_DARK_BLUE);
     draw_text_opaque(4, 4, " Wyvern's Sorrow ", COL_WHITE, COL_BLUE);
-    render_text(TITLE_TILE, 7);
+    render_text(TITLE_TILE, 9);
     //fill_tilemap(TILE_COLOR_WHITE, 0, 0, tilemap_width, tilemap_height);
     for(int j=0;j<15;j++)
     {
@@ -26,7 +27,7 @@ void init_menu(void)
             draw_tilemap(i, j, TILE_COLOR_WHITE+(j%2)*2+(i%2));
         }
     }
-    for(int i=0;i<7;i++) {
+    for(int i=0;i<9;i++) {
         draw_tilemap(7+i, 0, TITLE_TILE+i);
     }
     clear_text_tiles(COL_DARK_GREEN);
@@ -39,10 +40,16 @@ void init_menu(void)
     set_font(FONT_FLAMBOYANT);
     draw_text(0,0,"Play as Swordsman",COL_RED);
     draw_text(0,8,"Play as Mage",COL_LIGHT_GRAY);
-    draw_text(0,16,"Play as Wyvern",COL_LIGHT_GRAY);
-    render_text(CHOICE_TILE, 7);
-    for(int i=0;i<7;i++) {
+    render_text(CHOICE_TILE, 9);
+
+    clear_text_tiles(COL_DARK_GREEN);
+    draw_text(0,0,"Play as Wyvern",COL_LIGHT_GRAY);
+    render_text(CHOICE_TILE2, 7);
+    for(int i=0;i<9;i++) {
         draw_tilemap(7+i, 9, CHOICE_TILE+i);
+    }
+    for(int i=0;i<9;i++) {
+        draw_tilemap(7+i, 10, CHOICE_TILE2+i);
     }
     render_tilemap(0);
 }
@@ -82,13 +89,15 @@ void draw_menu(void)
 {
     clear_text_tiles(COL_WHITE);
     set_font(FONT_FLAMBOYANT);
-    draw_text(0,choice*8,">",COL_RED);
+    if(choice<2) draw_text(0,choice*8,">",COL_RED);
     //set_font(choice==0?FONT_SPEEDWAY_BOLD:FONT_SPEEDWAY);
     draw_text(8,0,"Play as Swordsman",choice==0?choice_color:COL_DARK_RED);
     //set_font(choice==1?FONT_SPEEDWAY_BOLD:FONT_SPEEDWAY);
     draw_text(8,8,"Play as Mage",choice==1?choice_color:COL_DARK_RED);
-    render_text(CHOICE_TILE, 7);
+    render_text(CHOICE_TILE, 9);
+    clear_text_tiles(COL_WHITE);
+    if(choice==2) draw_text(0,0,">",COL_RED);
     draw_text(8,0,"Play as Wyvern",choice==2?choice_color:COL_DARK_RED);
-    render_text(CHOICE_TILE, 7);
+    render_text(CHOICE_TILE2, 9);
     render_tilemap(0);
 }
