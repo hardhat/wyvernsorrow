@@ -87,7 +87,10 @@ void update_menu(void)
 
 void draw_menu(void)
 {
+    char buffer[16];
     clear_text_tiles(COL_WHITE);
+    for(int i=0;i<16;i++) buffer[i]=TILE_COLOR_DEMONLORD+i;
+    for(int i=0;i<16;i+=4) draw_tilemap_array(9,2+(i/4),(uint8_t *)buffer+i,4);
     set_font(FONT_FLAMBOYANT);
     if(choice<2) draw_text(0,choice*8,">",COL_RED);
     //set_font(choice==0?FONT_SPEEDWAY_BOLD:FONT_SPEEDWAY);
