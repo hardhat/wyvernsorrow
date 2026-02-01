@@ -120,7 +120,7 @@ static bool story_step(uint8_t obj, const uint8_t *script)
         switch(op) {
             case SOP_END:
                 world.state[obj] = 0;
-                return false;
+                return true;
 
             case SOP_SAY: {
                 uint8_t sid = script[pc++];
@@ -189,8 +189,5 @@ bool story_interact(uint8_t obj)
         return false;
     }
 
-    // Reset PC to start of script for each interaction
-    world.state[obj] = 0;
-    
     return story_step(obj, script);
 }
