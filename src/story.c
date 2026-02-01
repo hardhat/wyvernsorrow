@@ -189,5 +189,8 @@ bool story_interact(uint8_t obj)
         return false;
     }
 
+    // Reset PC to start of script for each interaction
+    world.state[obj] = 0;
+    
     return story_step(obj, script);
 }
