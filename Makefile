@@ -31,8 +31,10 @@ obj/%.rel: src/%.asm
 	$(AS) $@ $<
 
 img/%.zts: img/%.gif
-	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $<
-	# $(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
+	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -z -i $<
+
+img/demonlord.zts: img/demonlord.gif
+	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
 
 obj/game.rel: src/game.c src/game.h src/main.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h

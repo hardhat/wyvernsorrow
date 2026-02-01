@@ -130,26 +130,35 @@ uint8_t handle_input(uint8_t key)
 
 void init(void)
 {
+    ser = open("#SER0",O_WRONLY);
+    if (ser < 0) {
+        printf("Failed to open serial port\n");
+	exit(1);
+    }
+    log("Initializing...");
+
     gfx_enable_screen(0);
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
     zvb_sound_initialize(1);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_DARK_BLUE);
-    gfx_palette_load(&ctx, terrain_palette, 64, PAL_TERRAIN);
-    gfx_palette_load(&ctx, enemies_palette, 64, PAL_ENEMIES);
-    gfx_palette_load(&ctx, npc_pc_palette, 64, PAL_NPC_PC);
-    gfx_palette_load(&ctx, bosses_palette, 64, PAL_BOSSES);
-    gfx_palette_load(&ctx, demonlord_palette, 64, PAL_DEMONLORD);
-    gfx_tileset_options options0 = {0,TILE_COLOR_TERRAIN*256,PAL_TERRAIN,0};
-    gfx_tileset_load(&ctx, terrain_tileset, 256*28, &options0);
-    gfx_tileset_options options1 = {0,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,1};
-    gfx_tileset_load(&ctx, enemies_tileset, 256*9, &options1);
-    gfx_tileset_options options2 = {0,TILE_COLOR_NPC_PC*256,PAL_NPC_PC,1};
-    gfx_tileset_load(&ctx, npc_pc_tileset, 256*14, &options2);
-    gfx_tileset_options options3 = {0,TILE_COLOR_BOSSES*256,PAL_BOSSES,1};
-    gfx_tileset_load(&ctx, bosses_tileset, 256*20, &options3);
-    gfx_tileset_options options4 = {0,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
-    gfx_tileset_load(&ctx, demonlord_tileset, 256*16, &options4);
+    gfx_palette_load(&ctx, terrain_palette, terrain_palette_sz, PAL_TERRAIN);
+    gfx_palette_load(&ctx, enemies_palette, enemies_palette_sz, PAL_ENEMIES);
+    gfx_palette_load(&ctx, npc_pc_palette, npc_pc_palette_sz, PAL_NPC_PC);
+    gfx_palette_load(&ctx, bosses_palette, bosses_palette_sz, PAL_BOSSES);
+    gfx_palette_load(&ctx, demonlord_palette, demonlord_palette_sz, PAL_DEMONLORD);
+    gfx_tileset_options options0 = {TILESET_COMP_RLE,TILE_COLOR_TERRAIN*256,PAL_TERRAIN,0};
+    gfx_tileset_load(&ctx, terrain_tileset, terrain_tileset_sz, &options0);
+    gfx_tileset_options options1 = {TILESET_COMP_RLE,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,1};
+    gfx_tileset_load(&ctx, enemies_tileset, enemies_tileset_sz, &options1);
+    gfx_tileset_options options2 = {TILESET_COMP_RLE,TILE_COLOR_NPC_PC*256,PAL_NPC_PC,1};
+    gfx_tileset_load(&ctx, npc_pc_tileset, npc_pc_tileset_sz, &options2);
+    gfx_tileset_options options3 = {TILESET_COMP_RLE,TILE_COLOR_BOSSES*256,PAL_BOSSES,1};
+    gfx_tileset_load(&ctx, bosses_tileset, bosses_tileset_sz, &options3);
+    gfx_tileset_options options4 = {TILESET_COMP_4BIT,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
+    gfx_tileset_load(&ctx, demonlord_tileset, demonlord_tileset_sz, &options4);
+
+    log("Loaded tilesets and palettes.");
 
     // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
     clear_text_tiles(TEXT_COLOR_BLACK);
@@ -175,11 +184,6 @@ void init(void)
 
     gfx_enable_screen(1);
 
-    ser = open("#SER0",O_WRONLY);
-    if (ser < 0) {
-        printf("Failed to open serial port\n");
-	exit(1);
-    }
     /* Initialize the keyboard by setting it to raw and non-blocking */
     void* arg = (void*) (KB_READ_NON_BLOCK | KB_MODE_RAW);
     ioctl(DEV_STDIN, KB_CMD_SET_MODE, arg);
