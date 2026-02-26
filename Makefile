@@ -1,7 +1,7 @@
 ZOS_PATH ?= ../Zeal-8-bit-OS
 ZVB_SDK_PATH ?= ../Zeal-VideoBoard-SDK
 BIN=bin/wyvern.bin
-OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/img.rel
+OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/img.rel obj/map.rel
 IMG=img/terrain.zts img/npc_pc.zts img/enemies.zts img/bosses.zts img/demonlord.zts
 CC=sdcc
 CFLAGS=-mz80 --std-c2x -c -I $(ZOS_PATH)/kernel_headers/sdcc/include/ -I $(ZVB_SDK_PATH)/include --codeseg TEXT --debug
@@ -36,11 +36,12 @@ img/%.zts: img/%.gif
 img/demonlord.zts: img/demonlord.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
 
-obj/game.rel: src/game.c src/game.h src/main.h
+obj/game.rel: src/game.c src/game.h src/main.h src/map.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h
 obj/main.rel: src/main.c src/game.h src/menu.h src/img.h
 obj/world.rel: src/world.c src/world.h src/main.h
 obj/story.rel: src/story.c src/story.h src/world.h src/main.h
+obj/map.rel: src/map.c src/map.h src/main.h
 obj/img.rel: src/img.asm $(IMG)
 
 clean:

@@ -7,6 +7,7 @@
 #include "game.h"
 #include "world.h"
 #include "story.h"
+#include "map.h"
 
 struct Game game;
 
@@ -16,7 +17,13 @@ bool held[MAX_INPUT];
 
 static uint8_t current_room = WROOM_TOWN;
 
+#define FIRST_ROOM WROOM_TOWN
+#define LAST_ROOM WROOM_DEMON_GATE
+
 #define DIALOG_TILE 0xB0
+#define ROOM_TILE 0xA0
+#define ROOM_TILE_COUNT 8
+#define ROOM_TILE_X 6
 
 static void draw_dialog_text(const char *text)
 {
@@ -56,6 +63,96 @@ void game_show_dialog(const char *text)
     draw_dialog_text(text);
 }
 
+static void game_clear_dialog(void)
+{
+    // Remove the dialog tiles from the tilemap.
+    for(uint8_t i = 0; i < 16; i++) {
+        draw_tilemap(2 + i, 14, TILE_OVERMAP_GRASS);
+    }
+    render_tilemap(0);
+}
+
+static const char *get_room_name(uint8_t room)
+{
+    switch(room) {
+        case WROOM_TOWN: return "Town";
+        case WROOM_FOREST: return "Forest";
+        case WROOM_OGRE_LAIR: return "Ogre Lair";
+        case WROOM_CASTLE: return "Castle";
+        case WROOM_CRYPT: return "Crypt";
+        case WROOM_TOWER: return "Tower";
+        case WROOM_CAVE: return "Cave";
+        case WROOM_RUINS: return "Ruins";
+        case WROOM_SHRINE: return "Shrine";
+        case WROOM_HARBOR: return "Harbor";
+        case WROOM_MOUNTAIN_PASS: return "Mountain Pass";
+        case WROOM_VOLCANO: return "Volcano";
+        case WROOM_SKY_PEAK: return "Sky Peak";
+        case WROOM_SWAMP: return "Swamp";
+        case WROOM_DEMON_GATE: return "Demon Gate";
+        default: return "";
+    }
+}
+
+static void draw_room_name(uint8_t room)
+{
+    const char *name = get_room_name(room);
+
+    clear_text_tiles(COL_DARK_BLUE);
+    set_font(FONT_FLAMBOYANT);
+    if(name[0] != '\0') {
+        draw_text_opaque(4, 4, name, COL_WHITE, COL_BLUE);
+    }
+    render_text(ROOM_TILE, ROOM_TILE_COUNT);
+
+    for(uint8_t i = 0; i < ROOM_TILE_COUNT; i++) {
+        draw_tilemap(ROOM_TILE_X + i, 0, ROOM_TILE + i);
+    }
+    render_tilemap(0);
+}
+
+static void draw_room_map(uint8_t room)
+{
+    const uint8_t (*map)[MAP_WIDTH] = NULL;
+    switch(room) {
+        case WROOM_TOWN: map = town_map; break;
+        case WROOM_FOREST: map = forest_map; break;
+        case WROOM_OGRE_LAIR: map = ogre_lair_map; break;
+        case WROOM_CASTLE: map = castle_map; break;
+        case WROOM_CRYPT: map = crypt_map; break;
+        case WROOM_TOWER: map = tower_map; break;
+        case WROOM_CAVE: map = cave_map; break;
+        case WROOM_RUINS: map = ruins_map; break;
+        case WROOM_SHRINE: map = shrine_map; break;
+        case WROOM_HARBOR: map = harbor_map; break;
+        case WROOM_MOUNTAIN_PASS: map = mountain_pass_map; break;
+        case WROOM_VOLCANO: map = volcano_map; break;
+        case WROOM_SKY_PEAK: map = sky_peak_map; break;
+        case WROOM_SWAMP: map = swamp_map; break;
+        case WROOM_DEMON_GATE: map = demon_gate_map; break;
+    }
+    if(map) {
+        for(uint8_t y = 0; y < MAP_HEIGHT; y++) {
+            for(uint8_t x = 0; x < MAP_WIDTH; x++) {
+                draw_tilemap(x, y, map[y][x]);
+            }
+        }
+    }
+    render_tilemap(0);
+}
+
+static void change_room(int8_t delta)
+{
+    int16_t next = (int16_t)current_room + delta;
+    if(next < (int16_t)FIRST_ROOM) next = (int16_t)LAST_ROOM;
+    else if(next > (int16_t)LAST_ROOM) next = (int16_t)FIRST_ROOM;
+
+    current_room = (uint8_t)next;
+    draw_room_map(current_room);
+    game_clear_dialog();
+    draw_room_name(current_room);
+}
+
 static uint8_t find_interactable_at(uint8_t room, uint8_t tile_x, uint8_t tile_y)
 {
     uint8_t obj = world.child[room];
@@ -78,9 +175,6 @@ static uint8_t find_interactable_at(uint8_t room, uint8_t tile_x, uint8_t tile_y
 
 void init_game(void)
 {
-    // Simple backdrop for now; the story/world layer sits on top via sprites.
-    fill_tilemap(TILE_OVERMAP_GRASS, 0, 0, tilemap_width, tilemap_height);
-    render_tilemap(0);
     log("Game started.");
     set_font(FONT_FLAMBOYANT);
 
@@ -88,6 +182,8 @@ void init_game(void)
     world_init();
     world_setup_demo();
     current_room = WROOM_TOWN;
+    draw_room_map(current_room);
+    draw_room_name(current_room);
 
     // Set player sprite based on menu choice
     switch(game.player.type) {
@@ -113,6 +209,12 @@ void input_game(uint8_t key, bool down)
     switch(key) {
         case INPUT_START:
             set_state(GAME_STATE_GAMEOVER);
+            break;
+        case INPUT_X:
+            change_room(1);
+            break;
+        case INPUT_Y:
+            change_room(-1);
             break;
         case INPUT_UP:
             cursor_y--;
@@ -143,8 +245,8 @@ void input_game(uint8_t key, bool down)
             uint8_t target = find_interactable_at(current_room, tile_x, tile_y);
             if(target != WOBJ_NONE) {
                 if(!story_interact(target)) {
-                    // Script ran but had nothing to say; show a tiny default.
-                    game_show_dialog("...");
+                    // Script ended or had nothing to say; clear the dialog.
+                    game_clear_dialog();
                 }
             } else {
                 game_show_dialog("Nothing here.");
