@@ -56,11 +56,11 @@ static const char * const story_strings[] = {
 
 // Merchant: first talk -> line 1 + set TALKED, then next time -> line 2.
 static const uint8_t script_merchant[] = {
-    SOP_IF_FLAG_GOTO, WNPC_MERCHANT, (uint8_t)(WFLAG_TALKED & 0xFF), (uint8_t)(WFLAG_TALKED >> 8), 10,
+    SOP_IF_FLAG_GOTO, WNPC_MERCHANT, (uint8_t)(WFLAG_TALKED & 0xFF), (uint8_t)(WFLAG_TALKED >> 8), 12,
     SOP_SAY, 1,
     SOP_SET_FLAG, WNPC_MERCHANT, (uint8_t)(WFLAG_TALKED & 0xFF), (uint8_t)(WFLAG_TALKED >> 8),
     SOP_END,
-    // pc=10
+    // pc=12
     SOP_SAY, 2,
     SOP_END,
 };
@@ -120,7 +120,7 @@ static bool story_step(uint8_t obj, const uint8_t *script)
         switch(op) {
             case SOP_END:
                 world.state[obj] = 0;
-                return true;
+                return false;
 
             case SOP_SAY: {
                 uint8_t sid = script[pc++];
