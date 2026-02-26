@@ -100,7 +100,7 @@ def save_maps(maps_data):
             # Regex to replace just the contents of this specific map
             replace_pattern = re.compile(rf'(const\s+uint8_t\s+{map_name}\[MAP_HEIGHT\]\[MAP_WIDTH\]\s*=\s*\{{)\s*(.*?)\s*(\}};)', re.MULTILINE | re.DOTALL)
             
-            new_content = replace_pattern.sub(rf'\1\n{c_array_str}\2', new_content)
+            new_content = replace_pattern.sub(rf'\1\n{c_array_str}\3', new_content)
             
         with open(MAP_FILE_PATH, 'w') as f:
             f.write(new_content)
