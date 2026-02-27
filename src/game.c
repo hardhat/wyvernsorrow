@@ -148,7 +148,10 @@ static void change_room(int8_t delta)
     else if(next > (int16_t)LAST_ROOM) next = (int16_t)FIRST_ROOM;
 
     current_room = (uint8_t)next;
+    clear_sprites();
     draw_room_map(current_room);
+    world_render_room_sprites(current_room);
+    render_sprites();
     game_clear_dialog();
     draw_room_name(current_room);
 }
