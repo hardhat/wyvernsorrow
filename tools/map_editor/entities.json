@@ -37,7 +37,7 @@
             "y": 6
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_WEREWOLF",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -60,7 +60,7 @@
             "y": 6
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_OLD_MAN",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -74,7 +74,7 @@
     ],
     "castle_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_KING",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -85,7 +85,7 @@
             "y": 5
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_SILVER_KNIGHT",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -98,7 +98,7 @@
     ],
     "crypt_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_SKELETON",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -108,7 +108,7 @@
             "y": 9
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_CARPENTER",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -122,7 +122,7 @@
     ],
     "tower_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_GENIE",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -132,7 +132,7 @@
             "y": 9
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_MOTHER",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -146,7 +146,7 @@
     ],
     "cave_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_ORC",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -156,7 +156,7 @@
             "y": 6
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_FATHER",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -170,7 +170,7 @@
     ],
     "ruins_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_TROLL",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -182,7 +182,7 @@
     ],
     "shrine_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_GHOST",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -192,7 +192,7 @@
             "y": 7
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WNPC_OLD_MAN",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -206,7 +206,7 @@
     ],
     "harbor_map": [
         {
-            "id": "WNPC_NEW",
+            "id": "WENT_DARK_KNIGHT",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -216,7 +216,7 @@
             "y": 6
         },
         {
-            "id": "WNPC_NEW",
+            "id": "WITEM_FISH",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
@@ -229,8 +229,8 @@
     ],
     "mountain_pass_map": [
         {
-            "id": "WNPC_NEW",
-            "type": "WTYPE_ACTOR",
+            "id": "WBOSS_WIND_DRAGON",
+            "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
@@ -241,8 +241,8 @@
     ],
     "volcano_map": [
         {
-            "id": "WNPC_NEW",
-            "type": "WTYPE_ACTOR",
+            "id": "WBOSS_FIRE_DRAGON",
+            "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
@@ -253,8 +253,8 @@
     ],
     "sky_peak_map": [
         {
-            "id": "WNPC_NEW",
-            "type": "WTYPE_ACTOR",
+            "id": "WBOSS_WIND_DRAGON",
+            "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
@@ -265,8 +265,8 @@
     ],
     "swamp_map": [
         {
-            "id": "WNPC_NEW",
-            "type": "WTYPE_ACTOR",
+            "id": "WBOSS_PUMPKIN_HEAD",
+            "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
@@ -277,8 +277,8 @@
     ],
     "demon_gate_map": [
         {
-            "id": "WNPC_NEW",
-            "type": "WTYPE_ACTOR",
+            "id": "WDEMONLORD",
+            "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
