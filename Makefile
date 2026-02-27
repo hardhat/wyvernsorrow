@@ -39,7 +39,7 @@ img/demonlord.zts: img/demonlord.gif
 obj/game.rel: src/game.c src/game.h src/main.h src/map.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h
 obj/main.rel: src/main.c src/game.h src/menu.h src/img.h
-obj/world.rel: src/world.c src/world.h src/main.h
+obj/world.rel: src/world.c src/world.h src/main.h src/world_entities.h
 obj/story.rel: src/story.c src/story.h src/world.h src/main.h
 obj/map.rel: src/map.c src/map.h src/main.h
 obj/img.rel: src/img.asm $(IMG)

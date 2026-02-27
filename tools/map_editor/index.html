@@ -241,8 +241,44 @@
                 <h5 class="mb-3 border-bottom border-secondary pb-2">Entity Properties</h5>
                 <div class="mb-2">
                     <label class="form-label mb-1 small text-muted">ID (Macro):</label>
-                    <input type="text" id="entId"
+                    <input type="text" id="entId" list="idSuggestions"
                         class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="WNPC_...">
+                    <datalist id="idSuggestions">
+                        <!-- NPCs -->
+                        <option value="WNPC_SWORDSMAN">
+                        <option value="WNPC_MAGE">
+                        <option value="WNPC_WYVERN">
+                        <option value="WNPC_LITTLE_GIRL">
+                        <option value="WNPC_MOTHER">
+                        <option value="WNPC_FATHER">
+                        <option value="WNPC_CARPENTER">
+                        <option value="WNPC_OLD_MAN">
+                        <option value="WNPC_KING">
+                        <option value="WNPC_MERCHANT">
+                            <!-- Enemies -->
+                        <option value="WENT_GOBLIN">
+                        <option value="WENT_ORC">
+                        <option value="WENT_WEREWOLF">
+                        <option value="WENT_SKELETON">
+                        <option value="WENT_SILVER_KNIGHT">
+                        <option value="WENT_DARK_KNIGHT">
+                        <option value="WENT_GHOST">
+                        <option value="WENT_TROLL">
+                        <option value="WENT_GENIE">
+                            <!-- Items -->
+                        <option value="WITEM_FISH">
+                        <option value="WITEM_SWORD">
+                        <option value="WITEM_STAFF">
+                        <option value="WITEM_SHIELD">
+                        <option value="WITEM_KEY">
+                            <!-- Bosses -->
+                        <option value="WBOSS_OGRE">
+                        <option value="WBOSS_LAND_DRAGON">
+                        <option value="WBOSS_WIND_DRAGON">
+                        <option value="WBOSS_FIRE_DRAGON">
+                        <option value="WBOSS_PUMPKIN_HEAD">
+                        <option value="WDEMONLORD">
+                    </datalist>
                 </div>
                 <div class="mb-3">
                     <label class="form-label mb-1 small text-muted">Type:</label>
@@ -587,6 +623,35 @@
             );
         }
 
+        function suggestIdForSprite(spriteName) {
+            // "TILE_PC_SWORDSMAN" -> "WNPC_SWORDSMAN"
+            // "TILE_GOBLIN" -> "WENT_GOBLIN"
+            // "TILE_BOSS_OGRE" -> "WBOSS_OGRE"
+            // "TILE_ITEM_FISH" -> "WITEM_FISH"
+
+            let id = spriteName.replace("TILE_", "W");
+            if (spriteName.startsWith("TILE_PC_") || spriteName.startsWith("TILE_NPC_")) {
+                id = spriteName.replace("TILE_PC_", "WNPC_").replace("TILE_NPC_", "WNPC_");
+            } else if (spriteName.startsWith("TILE_BOSS_")) {
+                id = spriteName.replace("TILE_BOSS_", "WBOSS_");
+            } else if (spriteName.startsWith("TILE_ITEM_")) {
+                id = spriteName.replace("TILE_ITEM_", "WITEM_");
+            } else if (spriteName.startsWith("TILE_COLOR_")) {
+                id = spriteName.replace("TILE_COLOR_", "W");
+            } else {
+                // Enemies
+                id = spriteName.replace("TILE_", "WENT_");
+            }
+            return id;
+        }
+
+        function suggestTypeForSprite(spriteName) {
+            if (spriteName.includes("_ITEM_")) return "WTYPE_ITEM";
+            if (spriteName.includes("_BOSS_")) return "WTYPE_BOSS";
+            if (spriteName.includes("_COLOR_DEMONLORD")) return "WTYPE_BOSS";
+            return "WTYPE_ACTOR";
+        }
+
         // Mouse Interaction
         function paint(e) {
             if (!isDrawing || !currentMapName) return;
@@ -635,9 +700,12 @@
                     renderCanvas();
                 } else if (selectedEntitySprite) {
                     // 2. Place a new entity
+                    const suggestedId = suggestIdForSprite(selectedEntitySprite.name);
+                    const suggestedType = suggestTypeForSprite(selectedEntitySprite.name);
+
                     const newEnt = {
-                        id: "WNPC_NEW",
-                        type: "WTYPE_ACTOR",
+                        id: suggestedId,
+                        type: suggestedType,
                         flags: ["WFLAG_VISIBLE"],
                         sprite: selectedEntitySprite.name,
                         x: gridX,
