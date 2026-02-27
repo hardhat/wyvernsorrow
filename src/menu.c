@@ -38,11 +38,12 @@ void init_menu(void)
         draw_tilemap(7+i, 7, MENU_TILE+i);
     }
     set_font(FONT_FLAMBOYANT);
+    clear_text_tiles(COL_WHITE);
     draw_text(0,0,"Play as Swordsman",COL_RED);
     draw_text(0,8,"Play as Mage",COL_LIGHT_GRAY);
     render_text(CHOICE_TILE, 9);
 
-    clear_text_tiles(COL_DARK_GREEN);
+    clear_text_tiles(COL_WHITE);
     draw_text(0,0,"Play as Wyvern",COL_LIGHT_GRAY);
     render_text(CHOICE_TILE2, 7);
     for(int i=0;i<9;i++) {

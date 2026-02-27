@@ -21,6 +21,8 @@
 #include "game.h"
 #include "img.h"
 
+void draw_big_text(const char *text, uint16_t x, uint8_t y, uint8_t color);
+
 enum GAME_STATE game_state = GAME_STATE_MENU;
 
 gfx_context ctx;
@@ -139,9 +141,19 @@ void init(void)
 
     gfx_enable_screen(0);
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
-    zvb_sound_initialize(1);
+
+    clear_text_tiles(TEXT_COLOR_BLACK);
+    render_tilemap(1);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_DARK_BLUE);
+    set_font(FONT_FLAMBOYANT);
+    draw_big_text("WS", 2, 4, TILE_COLOR_BLUE);
+    //draw_big_text("SORROW", 2, 8, TILE_COLOR_BLUE);
+    render_tilemap(0);
+    gfx_enable_screen(1);
+
+    zvb_sound_initialize(1);
+    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
     gfx_palette_load(&ctx, terrain_palette, terrain_palette_sz, PAL_TERRAIN);
     gfx_palette_load(&ctx, enemies_palette, enemies_palette_sz, PAL_ENEMIES);
     gfx_palette_load(&ctx, npc_pc_palette, npc_pc_palette_sz, PAL_NPC_PC);
@@ -155,7 +167,7 @@ void init(void)
     gfx_tileset_load(&ctx, npc_pc_tileset, npc_pc_tileset_sz, &options2);
     gfx_tileset_options options3 = {TILESET_COMP_RLE,TILE_COLOR_BOSSES*256,PAL_BOSSES,1};
     gfx_tileset_load(&ctx, bosses_tileset, bosses_tileset_sz, &options3);
-    gfx_tileset_options options4 = {TILESET_COMP_4BIT,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
+    gfx_tileset_options options4 = {TILESET_COMP_RLE,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
     gfx_tileset_load(&ctx, demonlord_tileset, demonlord_tileset_sz, &options4);
 
     log("Loaded tilesets and palettes.");
@@ -177,6 +189,8 @@ void init(void)
         draw_text_pixel(63, i, TEXT_COLOR_WHITE);
     }
     render_text(TILE_CURSOR, 4);
+
+    gfx_enable_screen(0);
 
     fill_tilemap(TILE_COLOR_BLACK, 0, 0, tilemap_width, tilemap_height);
     render_tilemap(0);
@@ -227,6 +241,36 @@ void set_font(enum FONT_FACE face)
             font = FONT_SPEEDWAY_BOLD_BITMAP;
             break;
 */
+    }
+}
+
+void draw_big_text_pixel(uint16_t x, uint8_t y, uint8_t color)
+{
+    int offset = x+y*tilemap_width;
+    if(offset<0 || offset>=tilemap_width*tilemap_height) return;  // Clip
+    tilemap0[offset] = color;
+}   
+
+void draw_big_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
+{
+    for(uint8_t i=0;i<8;i++)
+    {
+        uint8_t mask = 1<<(7-i);
+        for(uint8_t j=0;j<8;j++)
+        {
+            if(font[(c-32)*8+j] & mask)
+                draw_big_text_pixel(x+i, y+j, color);
+        }
+    }
+}
+
+void draw_big_text(const char *text, uint16_t x, uint8_t y, uint8_t color)
+{
+    for(int i=0;i<strlen(text);i++)
+    {
+        uint8_t c = text[i];
+        if(c<32 || c>127) c=32;
+        draw_big_text_char(x+i*8, y, c, color);
     }
 }
 
