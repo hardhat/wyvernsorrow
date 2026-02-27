@@ -22,6 +22,7 @@
 #include "img.h"
 
 void draw_big_text(const char *text, uint16_t x, uint8_t y, uint8_t color);
+void dzx0_standard(uint8_t *input, uint8_t *output);
 
 enum GAME_STATE game_state = GAME_STATE_MENU;
 
@@ -34,11 +35,11 @@ int sprite_count=0;
 gfx_sprite sprites[128];
 
 // The drawing surface is 16 tiles with 16x16 pixels each
-uint8_t text_tiles[256*16];
+uint8_t text_tiles[256*16+1024];
 const uint8_t *font = FONT_FLAMBOYANT_BITMAP;
 
 uint8_t tilemap0[20*15];
-uint8_t tilemap1[20*15];
+//uint8_t tilemap1[20*15];
 uint8_t tilemap_width=20;
 uint8_t tilemap_height=15;
 
@@ -142,33 +143,52 @@ void init(void)
     gfx_enable_screen(0);
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
 
-    clear_text_tiles(TEXT_COLOR_BLACK);
+    memset(tilemap0, 0, sizeof(tilemap0));
     render_tilemap(1);
+
     gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
-    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_DARK_BLUE);
+    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLUE, TEXT_COLOR_BLUE);
+
     set_font(FONT_FLAMBOYANT);
     draw_big_text("WS", 2, 4, TILE_COLOR_BLUE);
-    //draw_big_text("SORROW", 2, 8, TILE_COLOR_BLUE);
     render_tilemap(0);
     gfx_enable_screen(1);
 
     zvb_sound_initialize(1);
-    gfx_tileset_add_color_tile(&ctx, TILE_COLOR_BLACK, TEXT_COLOR_BLACK);
+
     gfx_palette_load(&ctx, terrain_palette, terrain_palette_sz, PAL_TERRAIN);
     gfx_palette_load(&ctx, enemies_palette, enemies_palette_sz, PAL_ENEMIES);
     gfx_palette_load(&ctx, npc_pc_palette, npc_pc_palette_sz, PAL_NPC_PC);
     gfx_palette_load(&ctx, bosses_palette, bosses_palette_sz, PAL_BOSSES);
     gfx_palette_load(&ctx, demonlord_palette, demonlord_palette_sz, PAL_DEMONLORD);
     gfx_tileset_options options0 = {TILESET_COMP_RLE,TILE_COLOR_TERRAIN*256,PAL_TERRAIN,0};
-    gfx_tileset_load(&ctx, terrain_tileset, terrain_tileset_sz, &options0);
+    dzx0_standard(terrain_tileset, text_tiles);
+    gfx_tileset_load(&ctx, text_tiles, terrain_tileset_sz, &options0);
+    draw_big_text("WS", 2, 4, TILE_OVERMAP_GRASS);
+    render_tilemap(0);
+    dzx0_standard(enemies_tileset, text_tiles); 
     gfx_tileset_options options1 = {TILESET_COMP_RLE,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,1};
-    gfx_tileset_load(&ctx, enemies_tileset, enemies_tileset_sz, &options1);
+    gfx_tileset_load(&ctx, text_tiles, enemies_tileset_sz, &options1);
+    for(int i=0;i<9;i++) {
+        draw_tilemap(i+5,0,TILE_COLOR_ENEMIES+i);
+    }
+    render_tilemap(0);
+    dzx0_standard(npc_pc_tileset, text_tiles);
     gfx_tileset_options options2 = {TILESET_COMP_RLE,TILE_COLOR_NPC_PC*256,PAL_NPC_PC,1};
-    gfx_tileset_load(&ctx, npc_pc_tileset, npc_pc_tileset_sz, &options2);
+    gfx_tileset_load(&ctx, text_tiles, npc_pc_tileset_sz, &options2);
+    draw_big_text("WS", 2, 4, TILE_OVERMAP_FOREST);
+    for(int i=0;i<14;i++) {
+        draw_tilemap(i+2,14,TILE_COLOR_NPC_PC+i);
+    }
+    render_tilemap(0);
+    dzx0_standard(bosses_tileset, text_tiles);
     gfx_tileset_options options3 = {TILESET_COMP_RLE,TILE_COLOR_BOSSES*256,PAL_BOSSES,1};
-    gfx_tileset_load(&ctx, bosses_tileset, bosses_tileset_sz, &options3);
+    gfx_tileset_load(&ctx, text_tiles, bosses_tileset_sz, &options3);
+    draw_big_text("WS", 2, 4, TILE_OVERMAP_MOUNTAIN);
+    render_tilemap(0);
+    dzx0_standard(demonlord_tileset, text_tiles);
     gfx_tileset_options options4 = {TILESET_COMP_RLE,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
-    gfx_tileset_load(&ctx, demonlord_tileset, demonlord_tileset_sz, &options4);
+    gfx_tileset_load(&ctx, text_tiles, demonlord_tileset_sz, &options4);
 
     log("Loaded tilesets and palettes.");
 
@@ -192,7 +212,7 @@ void init(void)
 
     gfx_enable_screen(0);
 
-    fill_tilemap(TILE_COLOR_BLACK, 0, 0, tilemap_width, tilemap_height);
+    memset(tilemap0, 0, sizeof(tilemap0));
     render_tilemap(0);
     render_tilemap(1);
 

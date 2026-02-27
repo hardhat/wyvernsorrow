@@ -1,0 +1,32 @@
+# Auto detect text files and normalize to LF in repo
+* text=auto eol=lf
+
+# Shell scripts must always be LF
+*.sh text eol=lf
+
+# C/C++ source
+*.c   text eol=lf
+*.h   text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+*.asm text eol=lf
+Makefile text eol=lf
+
+# Python
+*.py text eol=lf
+
+# Markdown
+*.md text eol=lf
+
+# Windows batch files can stay CRLF if needed
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary files (important!)
+*.png binary
+*.jpg binary
+*.zip binary
+*.exe binary
+*.ztp binary
+*.zts binary
+*.zx0 binary

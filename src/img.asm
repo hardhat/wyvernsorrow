@@ -27,7 +27,7 @@
 _terrain_tileset:
     .dw _terrain_tileset_data
 _terrain_tileset_data:
-    .incbin "img/terrain.zts"
+    .incbin "img/terrain.zts.zx0"
 _terrain_palette:
     .dw _terrain_palette_data
 _terrain_palette_data:
@@ -35,12 +35,12 @@ _terrain_palette_data:
 _terrain_palette_sz:
     .dw _terrain_palette_sz - _terrain_palette_data
 _terrain_tileset_sz:
-    .dw _terrain_palette - _terrain_tileset_data
+    .dw 4206 ;_terrain_palette - _terrain_tileset_data
 
 _enemies_tileset:
     .dw _enemies_tileset_data
 _enemies_tileset_data:
-    .incbin "img/enemies.zts"
+    .incbin "img/enemies.zts.zx0"
 _enemies_palette:
     .dw _enemies_palette_data
 _enemies_palette_data:
@@ -48,12 +48,12 @@ _enemies_palette_data:
 _enemies_palette_sz:
     .dw _enemies_palette_sz - _enemies_palette_data
 _enemies_tileset_sz:
-    .dw _enemies_palette - _enemies_tileset_data
+    .dw 1788 ;_enemies_palette - _enemies_tileset_data
 
 _npc_pc_tileset:
     .dw _npc_pc_tileset_data
 _npc_pc_tileset_data:
-    .incbin "img/npc_pc.zts"
+    .incbin "img/npc_pc.zts.zx0"
 _npc_pc_palette:
     .dw _npc_pc_palette_data
 _npc_pc_palette_data:
@@ -61,12 +61,12 @@ _npc_pc_palette_data:
 _npc_pc_palette_sz:
     .dw _npc_pc_palette_sz - _npc_pc_palette_data
 _npc_pc_tileset_sz:
-    .dw _npc_pc_palette - _npc_pc_tileset_data
+    .dw 2272 ;_npc_pc_palette - _npc_pc_tileset_data
 
 _bosses_tileset:
     .dw _bosses_tileset_data
 _bosses_tileset_data:
-    .incbin "img/bosses.zts"
+    .incbin "img/bosses.zts.zx0"
 _bosses_palette:
     .dw _bosses_palette_data
 _bosses_palette_data:
@@ -74,12 +74,12 @@ _bosses_palette_data:
 _bosses_palette_sz:
     .dw _bosses_palette_sz - _bosses_palette_data
 _bosses_tileset_sz:
-    .dw _bosses_palette - _bosses_tileset_data
+    .dw 3602 ;_bosses_palette - _bosses_tileset_data
 
 _demonlord_tileset:
     .dw _demonlord_tileset_data
 _demonlord_tileset_data:
-    .incbin "img/demonlord.zts"
+    .incbin "img/demonlord.zts.zx0"
 _demonlord_palette:
     .dw _demonlord_palette_data
 _demonlord_palette_data:
@@ -87,4 +87,4 @@ _demonlord_palette_data:
 _demonlord_palette_sz:
     .dw _demonlord_palette_sz - _demonlord_palette_data
 _demonlord_tileset_sz:
-    .dw _demonlord_palette - _demonlord_tileset_data
+    .dw 2660 ;_demonlord_palette - _demonlord_tileset_data

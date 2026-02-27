@@ -4,6 +4,7 @@ bin/
 s
 img/*.zts
 img/*.ztp
+img/*.zts.zx0
 *.swp
 *.bak
 .vscode/
