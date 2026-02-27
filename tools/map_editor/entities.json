@@ -37,7 +37,7 @@
             "y": 6
         },
         {
-            "id": "WNPC_WEREWOLF",
+            "id": "WENT_WEREWOLF",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE"
@@ -108,7 +108,7 @@
             "y": 9
         },
         {
-            "id": "WENT_CARPENTER",
+            "id": "WNPC_CARPENTER",
             "type": "WTYPE_ACTOR",
             "flags": [
                 "WFLAG_VISIBLE",
