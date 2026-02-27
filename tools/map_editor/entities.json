@@ -10,17 +10,6 @@
             "sprite": "TILE_NPC_MERCHANT",
             "x": 10,
             "y": 6
-        },
-        {
-            "id": "WITEM_FISH",
-            "type": "WTYPE_ITEM",
-            "flags": [
-                "WFLAG_VISIBLE",
-                "WFLAG_INTERACTABLE"
-            ],
-            "sprite": "TILE_ITEM_FISH",
-            "x": 9,
-            "y": 6
         }
     ],
     "forest_map": [

@@ -7,14 +7,6 @@
     world.y[WNPC_MERCHANT] = 6;
     wobj_add_child(WROOM_TOWN, WNPC_MERCHANT);
 
-    wobj_clear(WITEM_FISH);
-    world.type[WITEM_FISH] = WTYPE_ITEM;
-    world.flags[WITEM_FISH] = WFLAG_VISIBLE | WFLAG_INTERACTABLE;
-    world.sprite[WITEM_FISH] = TILE_ITEM_FISH;
-    world.x[WITEM_FISH] = 9;
-    world.y[WITEM_FISH] = 6;
-    wobj_add_child(WROOM_TOWN, WITEM_FISH);
-
     wobj_clear(WNPC_LITTLE_GIRL);
     world.type[WNPC_LITTLE_GIRL] = WTYPE_ACTOR;
     world.flags[WNPC_LITTLE_GIRL] = WFLAG_VISIBLE | WFLAG_INTERACTABLE | WFLAG_CAPTIVE;
