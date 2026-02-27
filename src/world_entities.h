@@ -11,7 +11,7 @@
     world.type[WITEM_FISH] = WTYPE_ITEM;
     world.flags[WITEM_FISH] = WFLAG_VISIBLE | WFLAG_INTERACTABLE;
     world.sprite[WITEM_FISH] = TILE_ITEM_FISH;
-    world.x[WITEM_FISH] = 12;
+    world.x[WITEM_FISH] = 9;
     world.y[WITEM_FISH] = 6;
     wobj_add_child(WROOM_TOWN, WITEM_FISH);
 
@@ -151,13 +151,13 @@
     world.y[WITEM_FISH] = 11;
     wobj_add_child(WROOM_HARBOR, WITEM_FISH);
 
-    wobj_clear(WBOSS_WIND_DRAGON);
-    world.type[WBOSS_WIND_DRAGON] = WTYPE_BOSS;
-    world.flags[WBOSS_WIND_DRAGON] = WFLAG_VISIBLE;
-    world.sprite[WBOSS_WIND_DRAGON] = TILE_BOSS_WIND_DRAGON;
-    world.x[WBOSS_WIND_DRAGON] = 7;
-    world.y[WBOSS_WIND_DRAGON] = 6;
-    wobj_add_child(WROOM_MOUNTAIN_PASS, WBOSS_WIND_DRAGON);
+    wobj_clear(WBOSS_LAND_DRAGON);
+    world.type[WBOSS_LAND_DRAGON] = WTYPE_BOSS;
+    world.flags[WBOSS_LAND_DRAGON] = WFLAG_VISIBLE;
+    world.sprite[WBOSS_LAND_DRAGON] = TILE_BOSS_LAND_DRAGON;
+    world.x[WBOSS_LAND_DRAGON] = 7;
+    world.y[WBOSS_LAND_DRAGON] = 6;
+    wobj_add_child(WROOM_MOUNTAIN_PASS, WBOSS_LAND_DRAGON);
 
     wobj_clear(WBOSS_FIRE_DRAGON);
     world.type[WBOSS_FIRE_DRAGON] = WTYPE_BOSS;

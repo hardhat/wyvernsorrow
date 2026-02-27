@@ -19,7 +19,7 @@
                 "WFLAG_INTERACTABLE"
             ],
             "sprite": "TILE_ITEM_FISH",
-            "x": 12,
+            "x": 9,
             "y": 6
         }
     ],
@@ -229,12 +229,12 @@
     ],
     "mountain_pass_map": [
         {
-            "id": "WBOSS_WIND_DRAGON",
+            "id": "WBOSS_LAND_DRAGON",
             "type": "WTYPE_BOSS",
             "flags": [
                 "WFLAG_VISIBLE"
             ],
-            "sprite": "TILE_BOSS_WIND_DRAGON",
+            "sprite": "TILE_BOSS_LAND_DRAGON",
             "x": 7,
             "y": 6
         }
