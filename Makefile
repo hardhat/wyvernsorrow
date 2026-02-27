@@ -33,8 +33,8 @@ obj/%.rel: src/%.asm
 img/%.zts: img/%.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -z -i $<
 
-img/demonlord.zts: img/demonlord.gif
-	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
+#img/demonlord.zts: img/demonlord.gif
+#	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
 
 obj/game.rel: src/game.c src/game.h src/main.h src/map.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h
