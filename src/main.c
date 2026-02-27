@@ -169,6 +169,7 @@ void init(void)
     dzx0_standard(enemies_tileset, text_tiles); 
     gfx_tileset_options options1 = {TILESET_COMP_RLE,TILE_COLOR_ENEMIES*256,PAL_ENEMIES,1};
     gfx_tileset_load(&ctx, text_tiles, enemies_tileset_sz, &options1);
+    draw_big_text("WS", 2, 4, TILE_OVERMAP_CITY);
     for(int i=0;i<9;i++) {
         draw_tilemap(i+5,0,TILE_COLOR_ENEMIES+i);
     }
