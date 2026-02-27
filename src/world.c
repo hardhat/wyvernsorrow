@@ -22,6 +22,10 @@ void world_init(void)
 {
     for(uint16_t i = 0; i < WORLD_OBJECT_COUNT; i++) {
         wobj_clear((uint8_t)i);
+        // By convention, objects 0-31 are rooms.
+        if (i < 32) {
+            world.type[i] = WTYPE_ROOM;
+        }
     }
 }
 
@@ -77,16 +81,8 @@ void wobj_set_flag(uint8_t obj, uint16_t flag, bool on)
 
 void world_setup_demo(void)
 {
-    // Rooms
-    wobj_clear(WROOM_TOWN);
-    world.type[WROOM_TOWN] = WTYPE_ROOM;
-
-    wobj_clear(WROOM_FOREST);
-    world.type[WROOM_FOREST] = WTYPE_ROOM;
-
-    wobj_clear(WROOM_OGRE_LAIR);
-    world.type[WROOM_OGRE_LAIR] = WTYPE_ROOM;
-
+    // The first 32 objects are rooms (set in world_init).
+    
     // Player object exists for story/state purposes (inventory, flags, etc.)
     wobj_clear(WOBJ_PLAYER);
     world.type[WOBJ_PLAYER] = WTYPE_ACTOR;
@@ -99,13 +95,35 @@ void world_setup_demo(void)
 void world_render_room_sprites(uint8_t room)
 {
     uint8_t obj = world.child[room];
+    uint8_t x, y, sprite;
+    const uint8_t stride = 10; // Row stride for boss/demonlord IDs
 
     while(obj != WOBJ_NONE) {
         if(wobj_has_flag(obj, WFLAG_VISIBLE)) {
-            // Convert tile coords to pixels. (Sprites are 16x16.)
-            add_sprite((uint16_t)world.x[obj] * 16, world.y[obj] * 16, world.sprite[obj]);
+            x = world.x[obj];
+            y = world.y[obj];
+            sprite = world.sprite[obj];
 
-            // If you later add 2x2 bosses, you can emit 4 sprites here.
+            if (world.type[obj] == WTYPE_BOSS) {
+                if (sprite == TILE_COLOR_DEMONLORD) {
+                    // 4x4 Demon Lord
+                    for (uint8_t r = 0; r < 4; r++) {
+                        for (uint8_t c = 0; c < 4; c++) {
+                            add_sprite((uint16_t)(x + c) * 16, (y + r) * 16, sprite + (r * 4) + c);
+                        }
+                    }
+                } else {
+                    // 2x2 Bosses (Ogre, Dragons, etc.)
+                    for (uint8_t r = 0; r < 2; r++) {
+                        for (uint8_t c = 0; c < 2; c++) {
+                            add_sprite((uint16_t)(x + c) * 16, (y + r) * 16, sprite + (r * stride) + c);
+                        }
+                    }
+                }
+            } else {
+                // 1x1 standard actor/item
+                add_sprite((uint16_t)x * 16, y * 16, sprite);
+            }
         }
         obj = world.sibling[obj];
     }

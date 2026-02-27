@@ -12,7 +12,7 @@
 
 // Keep IDs stable: these are save-game / script stable identifiers.
 enum WORLD_OBJECT_ID {
-    // Rooms / submaps (add up to ~15 as needed)
+    // Rooms / submaps (0-31)
     WROOM_TOWN = 0,
     WROOM_FOREST,
     WROOM_OGRE_LAIR,
@@ -32,6 +32,11 @@ enum WORLD_OBJECT_ID {
     // Actors / story objects
     WOBJ_PLAYER = 32,
 
+    // Allies / Party Members (as NPCs when not player-controlled)
+    WNPC_SWORDSMAN,
+    WNPC_MAGE,
+    WNPC_WYVERN,
+
     // NPCs
     WNPC_LITTLE_GIRL,
     WNPC_MOTHER,
@@ -41,14 +46,33 @@ enum WORLD_OBJECT_ID {
     WNPC_KING,
     WNPC_MERCHANT,
 
-    // Items (example)
-    WITEM_FISH = 64,
+    // Enemies (64-79)
+    WENT_GOBLIN = 64,
+    WENT_ORC,
+    WENT_WEREWOLF,
+    WENT_SKELETON,
+    WENT_SILVER_KNIGHT,
+    WENT_DARK_KNIGHT,
+    WENT_GHOST,
+    WENT_TROLL,
+    WENT_GENIE,
 
-    // Bosses / major enemies
-    WBOSS_OGRE = 80,
+    // Items (80-95)
+    WITEM_FISH = 80,
+    WITEM_SWORD,
+    WITEM_STAFF,
+    WITEM_SHIELD,
+    WITEM_KEY,
+
+    // Bosses / major enemies (112-127)
+    WBOSS_OGRE = 112,
+    WBOSS_LAND_DRAGON,
+    WBOSS_WIND_DRAGON,
+    WBOSS_FIRE_DRAGON,
+    WBOSS_PUMPKIN_HEAD,
 
     // Demon Lord (major boss)
-    WDEMONLORD = 96,
+    WDEMONLORD = 127,
 };
 
 enum WORLD_OBJECT_TYPE {
