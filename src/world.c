@@ -93,41 +93,7 @@ void world_setup_demo(void)
     world.flags[WOBJ_PLAYER] = WFLAG_VISIBLE;
     world.sprite[WOBJ_PLAYER] = TILE_PC_SWORDSMAN;
 
-    // Merchant in town
-    wobj_clear(WNPC_MERCHANT);
-    world.type[WNPC_MERCHANT] = WTYPE_ACTOR;
-    world.flags[WNPC_MERCHANT] = WFLAG_VISIBLE | WFLAG_INTERACTABLE;
-    world.sprite[WNPC_MERCHANT] = TILE_NPC_MERCHANT;
-    world.x[WNPC_MERCHANT] = 10;
-    world.y[WNPC_MERCHANT] = 6;
-    wobj_add_child(WROOM_TOWN, WNPC_MERCHANT);
-
-    // A fish item near the merchant
-    wobj_clear(WITEM_FISH);
-    world.type[WITEM_FISH] = WTYPE_ITEM;
-    world.flags[WITEM_FISH] = WFLAG_VISIBLE | WFLAG_INTERACTABLE;
-    world.sprite[WITEM_FISH] = TILE_ITEM_FISH;
-    world.x[WITEM_FISH] = 12;
-    world.y[WITEM_FISH] = 6;
-    wobj_add_child(WROOM_TOWN, WITEM_FISH);
-
-    // A simple boss in the ogre lair (2x2 sprite: you'll likely want multi-sprite later)
-    wobj_clear(WBOSS_OGRE);
-    world.type[WBOSS_OGRE] = WTYPE_BOSS;
-    world.flags[WBOSS_OGRE] = WFLAG_VISIBLE | WFLAG_INTERACTABLE;
-    world.sprite[WBOSS_OGRE] = TILE_BOSS_OGRE;
-    world.x[WBOSS_OGRE] = 9;
-    world.y[WBOSS_OGRE] = 6;
-    wobj_add_child(WROOM_OGRE_LAIR, WBOSS_OGRE);
-
-    // Captive girl in the forest (story hook)
-    wobj_clear(WNPC_LITTLE_GIRL);
-    world.type[WNPC_LITTLE_GIRL] = WTYPE_ACTOR;
-    world.flags[WNPC_LITTLE_GIRL] = WFLAG_VISIBLE | WFLAG_INTERACTABLE | WFLAG_CAPTIVE;
-    world.sprite[WNPC_LITTLE_GIRL] = TILE_NPC_LITTLE_GIRL;
-    world.x[WNPC_LITTLE_GIRL] = 6;
-    world.y[WNPC_LITTLE_GIRL] = 6;
-    wobj_add_child(WROOM_FOREST, WNPC_LITTLE_GIRL);
+#include "world_entities.h"
 }
 
 void world_render_room_sprites(uint8_t room)

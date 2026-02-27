@@ -1,0 +1,290 @@
+{
+    "town_map": [
+        {
+            "id": "WNPC_MERCHANT",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_NPC_MERCHANT",
+            "x": 10,
+            "y": 6
+        },
+        {
+            "id": "WITEM_FISH",
+            "type": "WTYPE_ITEM",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_ITEM_FISH",
+            "x": 12,
+            "y": 6
+        }
+    ],
+    "forest_map": [
+        {
+            "id": "WNPC_LITTLE_GIRL",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_LITTLE_GIRL",
+            "x": 6,
+            "y": 6
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_WEREWOLF",
+            "x": 12,
+            "y": 7
+        }
+    ],
+    "ogre_lair_map": [
+        {
+            "id": "WBOSS_OGRE",
+            "type": "WTYPE_BOSS",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_BOSS_OGRE",
+            "x": 9,
+            "y": 6
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_OLD_MAN",
+            "x": 10,
+            "y": 2
+        }
+    ],
+    "castle_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_NPC_KING",
+            "x": 12,
+            "y": 5
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_SILVER_KNIGHT",
+            "x": 10,
+            "y": 12
+        }
+    ],
+    "crypt_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_SKELETON",
+            "x": 9,
+            "y": 9
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_CARPENTER",
+            "x": 10,
+            "y": 5
+        }
+    ],
+    "tower_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_GENIE",
+            "x": 9,
+            "y": 9
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_MOTHER",
+            "x": 9,
+            "y": 4
+        }
+    ],
+    "cave_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_ORC",
+            "x": 9,
+            "y": 6
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_FATHER",
+            "x": 9,
+            "y": 3
+        }
+    ],
+    "ruins_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_TROLL",
+            "x": 10,
+            "y": 7
+        }
+    ],
+    "shrine_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_GHOST",
+            "x": 9,
+            "y": 7
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE",
+                "WFLAG_CAPTIVE"
+            ],
+            "sprite": "TILE_NPC_OLD_MAN",
+            "x": 10,
+            "y": 5
+        }
+    ],
+    "harbor_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_DARK_KNIGHT",
+            "x": 9,
+            "y": 6
+        },
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE",
+                "WFLAG_INTERACTABLE"
+            ],
+            "sprite": "TILE_ITEM_FISH",
+            "x": 9,
+            "y": 11
+        }
+    ],
+    "mountain_pass_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_BOSS_WIND_DRAGON",
+            "x": 7,
+            "y": 6
+        }
+    ],
+    "volcano_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_BOSS_FIRE_DRAGON",
+            "x": 9,
+            "y": 10
+        }
+    ],
+    "sky_peak_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_BOSS_WIND_DRAGON",
+            "x": 9,
+            "y": 6
+        }
+    ],
+    "swamp_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_BOSS_PUMPKIN_HEAD",
+            "x": 7,
+            "y": 7
+        }
+    ],
+    "demon_gate_map": [
+        {
+            "id": "WNPC_NEW",
+            "type": "WTYPE_ACTOR",
+            "flags": [
+                "WFLAG_VISIBLE"
+            ],
+            "sprite": "TILE_COLOR_DEMONLORD",
+            "x": 8,
+            "y": 8
+        }
+    ]
+}
