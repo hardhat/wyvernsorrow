@@ -39,19 +39,19 @@ static void draw_dialog_text(const char *text)
         draw_text_opaque(4, 4, text, COL_WHITE, COL_BLUE);
     } else {
         // Render first line
-        char line1[33];
+        char line1[41];
         uint8_t len = (uint8_t)(nl - text);
-        if(len > 32) len = 32;
+        if(len > 40) len = 40;
         for(uint8_t i = 0; i < len; i++) line1[i] = text[i];
         line1[len] = 0;
         draw_text_opaque(4, 0, line1, COL_WHITE, COL_BLUE);
         // Render second line
         draw_text_opaque(4, 8, nl + 1, COL_WHITE, COL_BLUE);
     }
-    render_text(DIALOG_TILE, 16);
+    render_text(DIALOG_TILE, 20);
 
-    // Place the 16 text tiles at the bottom of the screen.
-    for(uint8_t i = 0; i < 16; i++) {
+    // Place the 20 text tiles at the bottom of the screen.
+    for(uint8_t i = 0; i < 20; i++) {
         draw_tilemap(2 + i, 14, DIALOG_TILE + i);
     }
     render_tilemap(0);
