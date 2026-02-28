@@ -1,0 +1,129 @@
+{
+    "strings": [
+        "Hello, traveler.",
+        "Fresh fish for sale!",
+        "Come back anytime.",
+        "You got a fish.",
+        "Help me!",
+        "Thank you for saving me.",
+        "The ogre roars!\nIt looks hungry for adventurer steak.",
+        "The ogre is defeated.\nHe drops a recipe book for swamp-moss reduction.",
+        "I am a boulder.\nMove along, nothing to see here, definitely not a dragon.",
+        "Wait, did you hear the latest?\nThe Demon Lord is buying pottery wheels from the harbor!"
+    ],
+    "scripts": {
+        "WNPC_MERCHANT": [
+            [
+                "IF_FLAG_GOTO",
+                "WNPC_MERCHANT",
+                "WFLAG_TALKED",
+                4
+            ],
+            [
+                "SAY",
+                1
+            ],
+            [
+                "SET_FLAG",
+                "WNPC_MERCHANT",
+                "WFLAG_TALKED"
+            ],
+            [
+                "END"
+            ],
+            [
+                "SAY",
+                2
+            ],
+            [
+                "END"
+            ]
+        ],
+        "WITEM_FISH": [
+            [
+                "SAY",
+                3
+            ],
+            [
+                "MOVE",
+                "WITEM_FISH",
+                "WOBJ_PLAYER"
+            ],
+            [
+                "CLEAR_FLAG",
+                "WITEM_FISH",
+                "WFLAG_VISIBLE"
+            ],
+            [
+                "END"
+            ]
+        ],
+        "WBOSS_OGRE": [
+            [
+                "IF_FLAG_GOTO",
+                "WBOSS_OGRE",
+                "WFLAG_DEFEATED",
+                5
+            ],
+            [
+                "SAY",
+                6
+            ],
+            [
+                "SET_FLAG",
+                "WBOSS_OGRE",
+                "WFLAG_DEFEATED"
+            ],
+            [
+                "CLEAR_FLAG",
+                "WBOSS_OGRE",
+                "WFLAG_VISIBLE"
+            ],
+            [
+                "END"
+            ],
+            [
+                "SAY",
+                7
+            ],
+            [
+                "END"
+            ]
+        ],
+        "WBOSS_LAND_DRAGON": [
+            [
+                "SAY",
+                8
+            ],
+            [
+                "END"
+            ]
+        ],
+        "WBOSS_WIND_DRAGON": [
+            [
+                "SAY",
+                9
+            ],
+            [
+                "END"
+            ]
+        ]
+    },
+    "scenes": {
+        "town_map": {
+            "WNPC_MERCHANT": "WNPC_MERCHANT"
+        },
+        "forest_map": {
+            "WITEM_FISH": "WITEM_FISH"
+        },
+        "ogre_lair_map": {
+            "WBOSS_OGRE": "WBOSS_OGRE"
+        },
+        "mountain_pass_map": {
+            "WBOSS_LAND_DRAGON": "WBOSS_LAND_DRAGON"
+        },
+        "sky_peak_map": {
+            "WBOSS_WIND_DRAGON": "WBOSS_WIND_DRAGON"
+        }
+    }
+}

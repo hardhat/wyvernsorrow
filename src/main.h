@@ -218,10 +218,10 @@ void render_text(uint8_t tile, uint8_t tile_count);
 
 /// @brief Log to the serial port.
 /// @param message the message to log.
-void log(const char *message);
+void debug_log(const char *message);
 /// @brief Log to the serial port with a format string.
 /// @param format the format string to use.
 /// @param ... the arguments to the format string.
-void logf(const char *format, ...);
+void debug_logf(const char *format, ...);
 
 #endif

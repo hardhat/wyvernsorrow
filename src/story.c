@@ -1,9 +1,11 @@
 #include <stdint.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "main.h"
 #include "story.h"
 #include "world.h"
+#include "script.h"
 
 // Bytecode VM
 // - Runs until it hits a SAY (shows text and stops), or END.
@@ -28,87 +30,66 @@ static uint16_t read_u16(const uint8_t *p)
     return (uint16_t)p[0] | ((uint16_t)p[1] << 8);
 }
 
-// ---- Strings ----
-static const char s_hello[] = "Hello, traveler.";
-static const char s_merchant_1[] = "Fresh fish for sale!";
-static const char s_merchant_2[] = "Come back anytime.";
-static const char s_fish_take[] = "You got a fish.";
-static const char s_girl_captive[] = "Help me!";
-static const char s_girl_rescued[] = "Thank you for saving me.";
-static const char s_ogre_1[] = "The ogre roars!";
-static const char s_ogre_2[] = "The ogre is defeated.";
-
-static const char * const story_strings[] = {
-    s_hello,        // 0
-    s_merchant_1,   // 1
-    s_merchant_2,   // 2
-    s_fish_take,    // 3
-    s_girl_captive, // 4
-    s_girl_rescued, // 5
-    s_ogre_1,       // 6
-    s_ogre_2,       // 7
-};
-
-// ---- Scripts ----
-// Notes:
-// - pc values are absolute byte indices within the script array.
-// - Keep scripts short and branchy; use flags for story state.
-
-// Merchant: first talk -> line 1 + set TALKED, then next time -> line 2.
-static const uint8_t script_merchant[] = {
-    SOP_IF_FLAG_GOTO, WNPC_MERCHANT, (uint8_t)(WFLAG_TALKED & 0xFF), (uint8_t)(WFLAG_TALKED >> 8), 12,
-    SOP_SAY, 1,
-    SOP_SET_FLAG, WNPC_MERCHANT, (uint8_t)(WFLAG_TALKED & 0xFF), (uint8_t)(WFLAG_TALKED >> 8),
-    SOP_END,
-    // pc=12
-    SOP_SAY, 2,
-    SOP_END,
-};
-
-// Fish item: say + move to player + hide.
-static const uint8_t script_fish[] = {
-    SOP_SAY, 3,
-    SOP_MOVE, WITEM_FISH, WOBJ_PLAYER,
-    SOP_CLEAR_FLAG, WITEM_FISH, (uint8_t)(WFLAG_VISIBLE & 0xFF), (uint8_t)(WFLAG_VISIBLE >> 8),
-    SOP_END,
-};
-
-// Little girl: if CAPTIVE -> "Help me!" else -> "Thank you..."
-static const uint8_t script_little_girl[] = {
-    SOP_IF_FLAG_GOTO, WNPC_LITTLE_GIRL, (uint8_t)(WFLAG_CAPTIVE & 0xFF), (uint8_t)(WFLAG_CAPTIVE >> 8), 6,
-    SOP_SAY, 5,
-    SOP_END,
-    // pc=6
-    SOP_SAY, 4,
-    SOP_END,
-};
-
-// Ogre boss: if DEFEATED -> line 2 else line 1 + set defeated + hide.
-static const uint8_t script_ogre[] = {
-    SOP_IF_FLAG_GOTO, WBOSS_OGRE, (uint8_t)(WFLAG_DEFEATED & 0xFF), (uint8_t)(WFLAG_DEFEATED >> 8), 14,
-    SOP_SAY, 6,
-    SOP_SET_FLAG, WBOSS_OGRE, (uint8_t)(WFLAG_DEFEATED & 0xFF), (uint8_t)(WFLAG_DEFEATED >> 8),
-    SOP_CLEAR_FLAG, WBOSS_OGRE, (uint8_t)(WFLAG_VISIBLE & 0xFF), (uint8_t)(WFLAG_VISIBLE >> 8),
-    SOP_END,
-    // pc=14
-    SOP_SAY, 7,
-    SOP_END,
-};
-
-static const uint8_t *get_script(uint8_t obj)
+static const uint8_t *get_script(uint8_t obj, uint8_t room, uint8_t player_type)
 {
+    // Simplified resolution: just map objects to their scripts regardless of room for now,
+    // as per script.json "scripts" key.
+    // In a full implementation, we'd use the "scenes" mapping.
+    (void)room;
+    (void)player_type;
+
     switch(obj) {
-        case WNPC_MERCHANT:
-            return script_merchant;
-        case WITEM_FISH:
-            return script_fish;
-        case WNPC_LITTLE_GIRL:
-            return script_little_girl;
-        case WBOSS_OGRE:
-            return script_ogre;
-        default:
-            return 0;
+        case WNPC_MERCHANT: return script_WNPC_MERCHANT;
+        case WITEM_FISH: return script_WITEM_FISH;
+        case WBOSS_OGRE: return script_WBOSS_OGRE;
+        case WBOSS_LAND_DRAGON: return script_WBOSS_LAND_DRAGON;
+        case WBOSS_WIND_DRAGON: return script_WBOSS_WIND_DRAGON;
+        default: return 0;
     }
+}
+
+// Simple word wrap helper for 40 column display.
+// Splits text into a buffer with a single newline.
+// Returns true if there is more text to show (multipart).
+static bool wrap_text(const char *text, char *out_buf, uint8_t max_chars)
+{
+    uint8_t line1_end = 0;
+    uint8_t line2_end = 0;
+    uint8_t last_space = 0xFF;
+
+    // Find the end of the first line
+    for(uint8_t i = 0; i < max_chars && text[i] != '\0' && text[i] != '\n'; i++) {
+        if(text[i] == ' ') last_space = i;
+        line1_end = i + 1;
+    }
+
+    if(line1_end == max_chars && text[line1_end] != '\0' && text[line1_end] != ' ' && text[line1_end] != '\n' && last_space != 0xFF) {
+        line1_end = last_space;
+    }
+
+    strncpy(out_buf, text, line1_end);
+    out_buf[line1_end] = '\n';
+    
+    const char *next_line = text + line1_end;
+    if(*next_line == ' ' || *next_line == '\n') next_line++;
+
+    last_space = 0xFF;
+    for(uint8_t i = 0; i < max_chars && next_line[i] != '\0' && next_line[i] != '\n'; i++) {
+        if(next_line[i] == ' ') last_space = i;
+        line2_end = i + 1;
+    }
+    
+    if(line2_end == max_chars && next_line[line2_end] != '\0' && next_line[line2_end] != ' ' && next_line[line2_end] != '\n' && last_space != 0xFF) {
+        line2_end = last_space;
+    }
+
+    strncpy(out_buf + line1_end + 1, next_line, line2_end);
+    out_buf[line1_end + 1 + line2_end] = '\0';
+
+    // See if there's a third line or more
+    const char *excess = next_line + line2_end;
+    if(*excess == ' ' || *excess == '\n') excess++;
+    return *excess != '\0';
 }
 
 static bool story_step(uint8_t obj, const uint8_t *script)
@@ -124,7 +105,8 @@ static bool story_step(uint8_t obj, const uint8_t *script)
 
             case SOP_SAY: {
                 uint8_t sid = script[pc++];
-                game_show_dialog(story_strings[sid]);
+                const char *full_text = story_strings[sid];
+                game_show_dialog(full_text);
                 world.state[obj] = pc;
                 return true;
             }
@@ -175,16 +157,15 @@ static bool story_step(uint8_t obj, const uint8_t *script)
             }
 
             default:
-                // Fail safe: reset script.
                 world.state[obj] = 0;
                 return false;
         }
     }
 }
 
-bool story_interact(uint8_t obj)
+bool story_interact(uint8_t obj, uint8_t room, uint8_t player_type)
 {
-    const uint8_t *script = get_script(obj);
+    const uint8_t *script = get_script(obj, room, player_type);
     if(script == 0) {
         return false;
     }

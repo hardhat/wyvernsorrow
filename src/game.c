@@ -178,7 +178,7 @@ static uint8_t find_interactable_at(uint8_t room, uint8_t tile_x, uint8_t tile_y
 
 void init_game(void)
 {
-    log("Game started.");
+    debug_log("Game started.");
     set_font(FONT_FLAMBOYANT);
 
     // Initialize story/world state (Infocom-style object table)
@@ -237,7 +237,7 @@ void input_game(uint8_t key, bool down)
             break;
         case INPUT_SELECT:
             // Allow player to manually end their turn
-            logf("Player manually ended turn");
+            debug_logf("Player manually ended turn");
             end_turn();
             break;
         case INPUT_A:
@@ -247,14 +247,14 @@ void input_game(uint8_t key, bool down)
             uint8_t tile_y = (uint8_t)(cursor_y * 2);
             uint8_t target = find_interactable_at(current_room, tile_x, tile_y);
             if(target != WOBJ_NONE) {
-                if(!story_interact(target)) {
+                if(!story_interact(target, current_room, (uint8_t)game.player.type)) {
                     // Script ended or had nothing to say; clear the dialog.
                     game_clear_dialog();
                 }
             } else {
                 game_show_dialog("Nothing here.");
             }
-            logf("Interact at (%d,%d)", cursor_x, cursor_y);
+            debug_logf("Interact at (%d,%d)", cursor_x, cursor_y);
             break;
         }
         default:
@@ -277,7 +277,7 @@ void end_turn(void)
     }
 
 
-    logf("Turn ended. ");
+    debug_logf("Turn ended. ");
 }
 
 void update_game(void)
@@ -320,7 +320,7 @@ void init_gameover(void)
         draw_tilemap(7+i, 6, 0x80+i);
     render_tilemap(0);
     clear_sprites();
-    log("Game over.");
+    debug_log("Game over.");
 }
 
 void input_gameover(uint8_t key, bool down)

@@ -8,6 +8,6 @@
 // Scripts are bytecode arrays keyed by world object id.
 // The VM runs from a per-object program counter stored in world.state[obj].
 
-bool story_interact(uint8_t obj);
+bool story_interact(uint8_t obj, uint8_t room, uint8_t player_type);
 
 #endif

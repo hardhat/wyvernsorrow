@@ -45,7 +45,7 @@ uint8_t tilemap_height=15;
 
 zos_dev_t ser;
 
-void log(const char *message)
+void debug_log(const char *message)
 {
     size_t size=strlen(message);
 
@@ -54,14 +54,14 @@ void log(const char *message)
     write(ser, "\r\n", &size);
 }
 
-void logf(const char *format, ...)
+void debug_logf(const char *format, ...)
 {
     char buffer[256];
     va_list args;
     va_start(args, format);
     vsprintf(buffer, format, args);
     va_end(args);
-    log(buffer);
+    debug_log(buffer);
 }
 
 void set_state(enum GAME_STATE state)
@@ -79,7 +79,7 @@ void set_state(enum GAME_STATE state)
             init_gameover();
             break;
     }
-    logf("Setting state to %d.", state);
+    debug_logf("Setting state to %d.", state);
     game_state = state;
 }
 
@@ -138,7 +138,7 @@ void init(void)
         printf("Failed to open serial port\n");
 	exit(1);
     }
-    log("Initializing...");
+    debug_log("Initializing...");
 
     gfx_enable_screen(0);
     gfx_initialize(ZVB_CTRL_VID_MODE_GFX_320_8BIT, &ctx);
@@ -191,7 +191,7 @@ void init(void)
     gfx_tileset_options options4 = {TILESET_COMP_RLE,TILE_COLOR_DEMONLORD*256,PAL_DEMONLORD,1};
     gfx_tileset_load(&ctx, text_tiles, demonlord_tileset_sz, &options4);
 
-    log("Loaded tilesets and palettes.");
+    debug_log("Loaded tilesets and palettes.");
 
     // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
     clear_text_tiles(TEXT_COLOR_BLACK);
@@ -223,7 +223,7 @@ void init(void)
     void* arg = (void*) (KB_READ_NON_BLOCK | KB_MODE_RAW);
     ioctl(DEV_STDIN, KB_CMD_SET_MODE, arg);
 
-    log("Initialized.");
+    debug_log("Initialized.");
 }
 
 void set_palette(uint8_t index, uint16_t color)
@@ -423,7 +423,7 @@ void process_input(void)
         read(DEV_STDIN, &keys, &size);
         for(int i=0;i<size;i++) {
             char key = keys[i];
-           //logf("Processing input key %02x.", key);
+           //debug_logf("Processing input key %02x.", key);
            if(key == KB_RELEASED) {
                 pressed = false;
             } else {
@@ -483,7 +483,7 @@ int main(void)
                 break;
         }
     }
-    log("Quitting.");
+    debug_log("Quitting.");
 
     // Clear out sprites
     memset(sprites, 0, sizeof(sprites));
