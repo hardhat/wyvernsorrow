@@ -1,27 +1,15 @@
 {
-    "strings": [
-        "Hello, traveler.",
-        "Fresh fish for sale!",
-        "Come back anytime.",
-        "You got a fish.",
-        "Help me!",
-        "Thank you for saving me.",
-        "The ogre roars!\nIt looks hungry for adventurer steak.",
-        "The ogre is defeated.\nHe drops a recipe book for swamp-moss reduction.",
-        "I am a boulder.\nMove along, nothing to see here, definitely not a dragon.",
-        "Wait, did you hear the latest?\nThe Demon Lord is buying pottery wheels from the harbor!"
-    ],
     "scripts": {
         "WNPC_MERCHANT": [
             [
                 "IF_FLAG_GOTO",
                 "WNPC_MERCHANT",
                 "WFLAG_TALKED",
-                4
+                "repeat"
             ],
             [
                 "SAY",
-                1
+                "Fresh fish for sale!"
             ],
             [
                 "SET_FLAG",
@@ -32,8 +20,12 @@
                 "END"
             ],
             [
+                "LABEL",
+                "repeat"
+            ],
+            [
                 "SAY",
-                2
+                "Come back anytime."
             ],
             [
                 "END"
@@ -42,7 +34,7 @@
         "WITEM_FISH": [
             [
                 "SAY",
-                3
+                "You got a fish."
             ],
             [
                 "MOVE",
@@ -63,11 +55,11 @@
                 "IF_FLAG_GOTO",
                 "WBOSS_OGRE",
                 "WFLAG_DEFEATED",
-                5
+                "dead"
             ],
             [
                 "SAY",
-                6
+                "The ogre roars!\nIt looks hungry for adventurer steak."
             ],
             [
                 "SET_FLAG",
@@ -83,8 +75,12 @@
                 "END"
             ],
             [
+                "LABEL",
+                "dead"
+            ],
+            [
                 "SAY",
-                7
+                "The ogre is defeated.\nHe drops a recipe book for swamp-moss reduction."
             ],
             [
                 "END"
@@ -93,7 +89,7 @@
         "WBOSS_LAND_DRAGON": [
             [
                 "SAY",
-                8
+                "I am a boulder.\nMove along, nothing to see here, definitely not a dragon."
             ],
             [
                 "END"
@@ -102,7 +98,7 @@
         "WBOSS_WIND_DRAGON": [
             [
                 "SAY",
-                9
+                "Wait, did you hear the latest?\nThe Demon Lord is buying pottery wheels from the harbor!"
             ],
             [
                 "END"
