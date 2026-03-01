@@ -48,7 +48,7 @@ void test_sop_actions() {
     uint8_t obj = WNPC_MERCHANT;
     bool cont = story_interact(obj, WROOM_TOWN, 0);
     assert(cont == true);
-    assert(strcmp(last_dialog, story_strings[1]) == 0); // "Fresh fish for sale!"
+    assert(strcmp(last_dialog, "Fresh fish for sale!") == 0);
     
     // Interaction 1: Part B (SET_FLAG + END)
     cont = story_interact(obj, WROOM_TOWN, 0);
@@ -58,7 +58,7 @@ void test_sop_actions() {
     // Interaction 2 (should be line 2)
     cont = story_interact(obj, WROOM_TOWN, 0);
     assert(cont == true);
-    assert(strcmp(last_dialog, story_strings[2]) == 0); // "Come back anytime."
+    assert(strcmp(last_dialog, "Come back anytime.") == 0);
     
     // Interaction 3 (should end)
     cont = story_interact(obj, WROOM_TOWN, 0);
