@@ -21,6 +21,10 @@ void init_menu(void)
     char buffer[16];
 
     last_choice=-1;
+    for(int i=0;i<16;i++) buffer[i]=TILE_COLOR_DEMONLORD+i;
+    for(int i=0;i<16;i+=4) draw_tilemap_array(9,2+(i/4),(uint8_t *)buffer+i,4);
+    render_tilemap(0);
+
     set_font(FONT_FLAMBOYANT);
     clear_text_tiles(COL_DARK_BLUE, 9);
     draw_text_opaque(4, 4, " Wyvern's Sorrow ", COL_WHITE, COL_BLUE);
@@ -36,6 +40,9 @@ void init_menu(void)
     for(int i=0;i<9;i++) {
         draw_tilemap(7+i, 0, TITLE_TILE+i);
     }
+    for(int i=0;i<16;i++) buffer[i]=TILE_COLOR_DEMONLORD+i;
+    for(int i=0;i<16;i+=4) draw_tilemap_array(9,2+(i/4),(uint8_t *)buffer+i,4);
+    render_tilemap(0);
     clear_text_tiles(COL_DARK_GREEN, 7);
     set_font(FONT_FLAMBOYANT);
     draw_text_opaque(4, 4, " Press Start ", COL_WHITE, COL_BLUE);
@@ -62,8 +69,6 @@ void init_menu(void)
         draw_tilemap(7+i, 10, CHOICE_TILE2+i);
         draw_tilemap(7+i, 11, CHOICE_TILE3+i);
     }
-    for(int i=0;i<16;i++) buffer[i]=TILE_COLOR_DEMONLORD+i;
-    for(int i=0;i<16;i+=4) draw_tilemap_array(9,2+(i/4),(uint8_t *)buffer+i,4);
     render_tilemap(0);
 }
 
