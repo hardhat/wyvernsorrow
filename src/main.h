@@ -192,7 +192,7 @@ void clear_sprites(void);
 /// @brief Set the offscreen text tiles to a specific color.
 /// @note Each text tile is 16x16 pixels.  And there are 16 of them.  The fonts are 8x8, so 2x2 tiles.
 /// @param color palette index for the text tiles.
-void clear_text_tiles(uint8_t color);
+void clear_text_tiles(uint8_t color, uint8_t count);
 /// @brief Set the font to be used for text rendering
 void set_font(enum FONT_FACE font);
 /// @brief Draw a single pixel in the offscreen text tilemap.

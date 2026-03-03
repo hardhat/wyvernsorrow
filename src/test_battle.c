@@ -28,7 +28,7 @@ void wobj_set_flag(uint8_t o, uint16_t f, bool on) {
 #define COL_YELLOW 3
 #define COL_DARK_RED 4
 #define DIALOG_TILE 0xB0
-void clear_text_tiles(uint8_t c) {}
+void clear_text_tiles(uint8_t c, uint8_t count) {}
 void set_font(enum FONT_FACE f) {}
 void draw_text(uint16_t x, uint8_t y, const char *t, uint8_t c) { printf("DRAW TEXT: %s at (%d,%d)\n", t, x, y); }
 void draw_text_opaque(uint16_t x, uint8_t y, const char *t, uint8_t f, uint8_t b) {}

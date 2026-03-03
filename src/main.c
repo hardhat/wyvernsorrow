@@ -200,7 +200,7 @@ void init(void)
     debug_log("Loaded tilesets and palettes.");
 
     // Make a cursor block from 4 tiles with a 2x2 pixel square with black background and white rectangle
-    clear_text_tiles(TEXT_COLOR_BLACK);
+    clear_text_tiles(TEXT_COLOR_BLACK, 4);
     // Horizontal line on top and bottom
     for(int i=0;i<32;i++)
     {
@@ -248,9 +248,10 @@ void fill_tileset(uint8_t tile, uint8_t color)
     gfx_tileset_add_color_tile(&ctx, tile, color);
 }
 
-void clear_text_tiles(uint8_t color)
+void clear_text_tiles(uint8_t color, uint8_t count)
 {
-    memset(text_tiles, color, sizeof(text_tiles));
+    if (count > 20) count = 20;
+    memset(text_tiles, color, (size_t)count * 256);
 }
 
 void set_font(enum FONT_FACE face)

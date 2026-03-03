@@ -35,7 +35,7 @@ static void draw_dialog_text(const char *text)
         if(*p == '\n') { nl = p; break; }
     }
 
-    clear_text_tiles(COL_DARK_BLUE);
+    clear_text_tiles(COL_DARK_BLUE, 20);
     set_font(FONT_FLAMBOYANT);
     if(nl == NULL) {
         draw_text_opaque(4, 4, text, COL_WHITE, COL_BLUE);
@@ -100,7 +100,7 @@ static void draw_room_name(uint8_t room)
 {
     const char *name = get_room_name(room);
 
-    clear_text_tiles(COL_DARK_BLUE);
+    clear_text_tiles(COL_DARK_BLUE,ROOM_TILE_COUNT);
     set_font(FONT_FLAMBOYANT);
     if(name[0] != '\0') {
         draw_text_opaque(4, 4, name, COL_WHITE, COL_BLUE);
@@ -361,7 +361,7 @@ void draw_choice(void)
 {
     draw_game();
 
-    clear_text_tiles(COL_BLACK);
+    clear_text_tiles(COL_BLACK, 20);
     set_font(FONT_FLAMBOYANT);
     
     draw_text_opaque(4, 0, (choice_index == 0) ? "> Talk" : "  Talk", COL_WHITE, COL_BLUE);
@@ -391,7 +391,7 @@ void init_gameover(void)
         }
     }
     char buffer[64];
-    clear_text_tiles(COL_DARK_RED);
+    clear_text_tiles(COL_DARK_RED, 7);
     sprintf(buffer, "Game over.");
     draw_text(4, 4, buffer, COL_RED);
     render_text(0x80, 7);

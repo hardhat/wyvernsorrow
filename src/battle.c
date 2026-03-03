@@ -219,7 +219,7 @@ void update_battle(void)
 void draw_battle(void)
 {
     char buffer[64];
-    clear_text_tiles(COL_BLACK);
+    clear_text_tiles(COL_BLACK, 20);
     
     sprintf(buffer, "HP:%d POS:%d MOM:%d", p_combatant.hp, p_combatant.position, p_combatant.momentum);
     draw_text(4, 0, buffer, COL_WHITE);

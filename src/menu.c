@@ -22,7 +22,7 @@ void init_menu(void)
 
     last_choice=-1;
     set_font(FONT_FLAMBOYANT);
-    clear_text_tiles(COL_DARK_BLUE);
+    clear_text_tiles(COL_DARK_BLUE, 9);
     draw_text_opaque(4, 4, " Wyvern's Sorrow ", COL_WHITE, COL_BLUE);
     render_text(TITLE_TILE, 9);
     //fill_tilemap(TILE_COLOR_WHITE, 0, 0, tilemap_width, tilemap_height);
@@ -36,7 +36,7 @@ void init_menu(void)
     for(int i=0;i<9;i++) {
         draw_tilemap(7+i, 0, TITLE_TILE+i);
     }
-    clear_text_tiles(COL_DARK_GREEN);
+    clear_text_tiles(COL_DARK_GREEN, 7);
     set_font(FONT_FLAMBOYANT);
     draw_text_opaque(4, 4, " Press Start ", COL_WHITE, COL_BLUE);
     render_text(MENU_TILE, 7);
@@ -44,17 +44,17 @@ void init_menu(void)
         draw_tilemap(7+i, 7, MENU_TILE+i);
     }
     set_font(FONT_FLAMBOYANT);
-    clear_text_tiles(COL_BLACK);
+    clear_text_tiles(COL_BLACK, 1);
     draw_text(0,0,">",COL_RED);
     draw_text(0,0,"-",COL_RED);
     render_text(ARROW_TILE, 1);
-    clear_text_tiles(COL_WHITE);
+    clear_text_tiles(COL_WHITE, 9);
     draw_text(8,4,"Play as Swordsman",COL_DARK_GREEN);
     render_text(CHOICE_TILE, 9);
-    clear_text_tiles(COL_WHITE);
+    clear_text_tiles(COL_WHITE, 9);
     draw_text(8,4,"Play as Mage",COL_DARK_GREEN);
     render_text(CHOICE_TILE2, 9);
-    clear_text_tiles(COL_WHITE);
+    clear_text_tiles(COL_WHITE, 9);
     draw_text(8,4,"Play as Wyvern",COL_DARK_GREEN);
     render_text(CHOICE_TILE3, 9);
     for(int i=0;i<9;i++) {
