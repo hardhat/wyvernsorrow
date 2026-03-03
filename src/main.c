@@ -75,6 +75,12 @@ void set_state(enum GAME_STATE state)
         case GAME_STATE_GAME:
             init_game();
             break;
+        case GAME_STATE_CHOICE:
+            init_choice();
+            break;
+        case GAME_STATE_BATTLE:
+            init_battle();
+            break;
         case GAME_STATE_GAMEOVER:
             init_gameover();
             break;
@@ -436,6 +442,12 @@ void process_input(void)
                     case GAME_STATE_GAME:
                         input_game(input, pressed);
                         break;
+                    case GAME_STATE_CHOICE:
+                        input_choice(input, pressed);
+                        break;
+                    case GAME_STATE_BATTLE:
+                        input_battle(input, pressed);
+                        break;
                     case GAME_STATE_GAMEOVER:
                         input_gameover(input, pressed);
                         break;
@@ -466,6 +478,12 @@ int main(void)
             case GAME_STATE_GAME:
                 update_game();
                 break;
+            case GAME_STATE_CHOICE:
+                update_choice();
+                break;
+            case GAME_STATE_BATTLE:
+                update_battle();
+                break;
             case GAME_STATE_GAMEOVER:
                 update_gameover();
                 break;
@@ -477,6 +495,12 @@ int main(void)
                 break;
             case GAME_STATE_GAME:
                 draw_game();
+                break;
+            case GAME_STATE_CHOICE:
+                draw_choice();
+                break;
+            case GAME_STATE_BATTLE:
+                draw_battle();
                 break;
             case GAME_STATE_GAMEOVER:
                 draw_gameover();

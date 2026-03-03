@@ -16,6 +16,8 @@ int cursor_y=0;
 bool held[MAX_INPUT];
 
 static uint8_t current_room = WROOM_TOWN;
+static uint8_t choice_index = 0;
+static bool choice_has_battle = false;
 
 #define FIRST_ROOM WROOM_TOWN
 #define LAST_ROOM WROOM_DEMON_GATE
@@ -187,6 +189,7 @@ void init_game(void)
     current_room = WROOM_TOWN;
     draw_room_map(current_room);
     draw_room_name(current_room);
+    game.choice_target = WOBJ_NONE;
 
     // Set player sprite based on menu choice
     switch(game.player.type) {
@@ -221,19 +224,19 @@ void input_game(uint8_t key, bool down)
             break;
         case INPUT_UP:
             cursor_y--;
-            if(cursor_y<0) cursor_y=6;
+            if(cursor_y<0) cursor_y=14;
             break;
         case INPUT_DOWN:
             cursor_y++;
-            if(cursor_y>6) cursor_y=0;
+            if(cursor_y>14) cursor_y=0;
             break;
         case INPUT_LEFT:
             cursor_x--;
-            if(cursor_x<0) cursor_x=6;
+            if(cursor_x<0) cursor_x=19;
             break;
         case INPUT_RIGHT:
             cursor_x++;
-            if(cursor_x>6) cursor_x=0;
+            if(cursor_x>19) cursor_x=0;
             break;
         case INPUT_SELECT:
             // Allow player to manually end their turn
@@ -243,13 +246,19 @@ void input_game(uint8_t key, bool down)
         case INPUT_A:
         {
             // Interact with the object under the cursor.
-            uint8_t tile_x = (uint8_t)(cursor_x * 2);
-            uint8_t tile_y = (uint8_t)(cursor_y * 2);
+            uint8_t tile_x = (uint8_t)(cursor_x);
+            uint8_t tile_y = (uint8_t)(cursor_y);
             uint8_t target = find_interactable_at(current_room, tile_x, tile_y);
             if(target != WOBJ_NONE) {
-                if(!story_interact(target, current_room, (uint8_t)game.player.type)) {
-                    // Script ended or had nothing to say; clear the dialog.
-                    game_clear_dialog();
+                // If it's an enemy, boss, or the demon lord, show the choice menu.
+                if (world.type[target] == WTYPE_ENEMY || world.type[target] == WTYPE_BOSS || target == WDEMONLORD) {
+                    game.choice_target = target;
+                    set_state(GAME_STATE_CHOICE);
+                } else {
+                    if(!story_interact(target, current_room, (uint8_t)game.player.type)) {
+                        // Script ended or had nothing to say; clear the dialog.
+                        game_clear_dialog();
+                    }
                 }
             } else {
                 game_show_dialog("Nothing here.");
@@ -293,14 +302,84 @@ void draw_game(void)
 
     world_render_room_sprites(current_room);
 
-    // Draw the cursor as 4 sprites (2x2 tiles).
-    add_sprite(cursor_x*32, cursor_y*32, TILE_CURSOR);
-    add_sprite(cursor_x*32+16, cursor_y*32, TILE_CURSOR+1);
-    add_sprite(cursor_x*32, cursor_y*32+16, TILE_CURSOR+2);
-    add_sprite(cursor_x*32+16, cursor_y*32+16, TILE_CURSOR+3);
+    // Draw the cursor as 4 sprites (1x1 tiles).
+    add_sprite(cursor_x*16, cursor_y*16, TILE_CURSOR);
+    add_sprite(cursor_x*16+16, cursor_y*16, TILE_CURSOR+1);
+    add_sprite(cursor_x*16, cursor_y*16+16, TILE_CURSOR+2);
+    add_sprite(cursor_x*16+16, cursor_y*16+16, TILE_CURSOR+3);
     render_sprites();
-
 }
+
+void init_choice(void)
+{
+    choice_index = 0;
+    choice_has_battle = false;
+    if (world.type[game.choice_target] == WTYPE_BOSS || (game.choice_target >= 64 && game.choice_target <= 79)) {
+        if (!wobj_has_flag(game.choice_target, WFLAG_DEFEATED)) {
+            choice_has_battle = true;
+        }
+    }
+}
+
+void input_choice(uint8_t key, bool down)
+{
+    if (!down) return;
+    uint8_t max_choice = choice_has_battle ? 2 : 1;
+
+    switch(key) {
+        case INPUT_UP:
+            if (choice_index > 0) choice_index--;
+            else choice_index = max_choice;
+            break;
+        case INPUT_DOWN:
+            if (choice_index < max_choice) choice_index++;
+            else choice_index = 0;
+            break;
+        case INPUT_A:
+            if (choice_index == 0) { // Talk
+                set_state(GAME_STATE_GAME);
+                if (!story_interact(game.choice_target, current_room, (uint8_t)game.player.type)) {
+                    game_clear_dialog();
+                }
+            } else if (choice_index == 1 && choice_has_battle) { // Battle
+                set_state(GAME_STATE_BATTLE);
+            } else { // Done / Cancel
+                set_state(GAME_STATE_GAME);
+                game_clear_dialog();
+            }
+            break;
+        case INPUT_B:
+            set_state(GAME_STATE_GAME);
+            game_clear_dialog();
+            break;
+    }
+}
+
+void update_choice(void) {}
+
+void draw_choice(void)
+{
+    draw_game();
+
+    clear_text_tiles(COL_BLACK);
+    set_font(FONT_FLAMBOYANT);
+    
+    draw_text_opaque(4, 0, (choice_index == 0) ? "> Talk" : "  Talk", COL_WHITE, COL_BLUE);
+    if (choice_has_battle) {
+        draw_text_opaque(4, 8, (choice_index == 1) ? "> Battle" : "  Battle", COL_WHITE, COL_BLUE);
+        draw_text_opaque(4, 16, (choice_index == 2) ? "> Done" : "  Done", COL_WHITE, COL_BLUE);
+    } else {
+        draw_text_opaque(4, 8, (choice_index == 1) ? "> Done" : "  Done", COL_WHITE, COL_BLUE);
+    }
+
+    render_text(DIALOG_TILE, 20);
+    // Draw tiles at the bottom
+    for(uint8_t i = 0; i < 20; i++) {
+        draw_tilemap(2 + i, 13, DIALOG_TILE + i);
+    }
+    render_tilemap(0);
+}
+
 
 void init_gameover(void)
 {

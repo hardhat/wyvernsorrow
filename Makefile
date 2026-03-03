@@ -1,7 +1,7 @@
 ZOS_PATH ?= ../Zeal-8-bit-OS
 ZVB_SDK_PATH ?= ../Zeal-VideoBoard-SDK
 BIN=bin/wyvern.bin
-OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/img.rel obj/map.rel obj/dzx0_standard.rel
+OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/img.rel obj/map.rel obj/dzx0_standard.rel obj/battle.rel
 IMG=img/terrain.zts img/npc_pc.zts img/enemies.zts img/bosses.zts img/demonlord.zts
 IMGZX0=img/terrain.zts.zx0 img/npc_pc.zts.zx0 img/enemies.zts.zx0 img/bosses.zts.zx0 img/demonlord.zts.zx0
 CC=sdcc
@@ -46,6 +46,7 @@ obj/main.rel: src/main.c src/game.h src/menu.h src/img.h
 obj/world.rel: src/world.c src/world.h src/main.h src/world_entities.h
 obj/story.rel: src/story.c src/story.h src/world.h src/main.h
 obj/map.rel: src/map.c src/map.h src/main.h
+obj/battle.rel: src/battle.c src/battle.h src/game.h src/main.h src/world.h
 obj/img.rel: src/img.asm $(IMG) $(IMGZX0)
 
 clean:
