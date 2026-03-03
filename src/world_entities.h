@@ -119,14 +119,6 @@
     world.y[WENT_GHOST] = 7;
     wobj_add_child(WROOM_SHRINE, WENT_GHOST);
 
-    wobj_clear(WNPC_OLD_MAN);
-    world.type[WNPC_OLD_MAN] = WTYPE_ACTOR;
-    world.flags[WNPC_OLD_MAN] = WFLAG_VISIBLE | WFLAG_INTERACTABLE | WFLAG_CAPTIVE;
-    world.sprite[WNPC_OLD_MAN] = TILE_NPC_OLD_MAN;
-    world.x[WNPC_OLD_MAN] = 10;
-    world.y[WNPC_OLD_MAN] = 5;
-    wobj_add_child(WROOM_SHRINE, WNPC_OLD_MAN);
-
     wobj_clear(WENT_DARK_KNIGHT);
     world.type[WENT_DARK_KNIGHT] = WTYPE_ACTOR;
     world.flags[WENT_DARK_KNIGHT] = WFLAG_VISIBLE;

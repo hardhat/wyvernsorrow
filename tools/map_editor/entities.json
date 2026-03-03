@@ -179,18 +179,6 @@
             "sprite": "TILE_GHOST",
             "x": 9,
             "y": 7
-        },
-        {
-            "id": "WNPC_OLD_MAN",
-            "type": "WTYPE_ACTOR",
-            "flags": [
-                "WFLAG_VISIBLE",
-                "WFLAG_INTERACTABLE",
-                "WFLAG_CAPTIVE"
-            ],
-            "sprite": "TILE_NPC_OLD_MAN",
-            "x": 10,
-            "y": 5
         }
     ],
     "harbor_map": [
