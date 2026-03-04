@@ -304,19 +304,21 @@ void draw_big_text(const char *text, uint16_t x, uint8_t y, uint8_t color)
 
 void draw_text_pixel(uint16_t x, uint8_t y,uint8_t color)
 {
-    int offset = (x/16)*256+y*16+(x%16);
-    if(offset<0 || offset>=256*16) return;  // Clip
+    //int offset = (x/16)*256+y*16+(x%16);
+    int offset = ((x>>4)<<8)+(y<<4)+(x&0x0F);
+    if(offset<0 || offset>=256*20) return;  // Clip
     text_tiles[offset] = color;
 }
 
 void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
 {
+    uint8_t *ptr = font+((c-32)<<3);
     for(uint8_t i=0;i<8;i++)
     {
         uint8_t mask = 1<<(7-i);
         for(uint8_t j=0;j<8;j++)
         {
-            if(font[(c-32)*8+j] & (1<<(7-i)))
+            if(ptr[j] & mask)
                 draw_text_pixel(x+i, y+j, color);
         }
     }
