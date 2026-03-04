@@ -5,7 +5,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define DIALOG_TILE 0xB0
+#define BATTLE_TILE 0x80
+#define BATTLE_TILE2 0x8B
 
 static Combatant p_combatant;
 static Combatant e_combatant;
@@ -219,24 +220,28 @@ void update_battle(void)
 void draw_battle(void)
 {
     char buffer[64];
-    clear_text_tiles(COL_BLACK, 20);
+    clear_text_tiles(COL_BLACK, 12);
     
     sprintf(buffer, "HP:%d POS:%d MOM:%d", p_combatant.hp, p_combatant.position, p_combatant.momentum);
     draw_text(4, 0, buffer, COL_WHITE);
-    if (p_combatant.stance == STANCE_SPECIAL) draw_text(160, 0, "STANCE", COL_YELLOW);
     
     sprintf(buffer, "ENM HP:%d POS:%d", e_combatant.hp, e_combatant.position);
     draw_text(4, 8, buffer, COL_RED);
+    render_text(BATTLE_TILE, 12);
 
+    clear_text_tiles(COL_BLACK, 15);
+    if (p_combatant.stance == STANCE_SPECIAL) draw_text(32, 0, "STANCE", COL_YELLOW);
     if (player_turn) {
-        draw_text(4, 20, "A:ATK X:SPC UP/DN:MOV B:END", COL_YELLOW);
+        draw_text(4, 8, "A:ATK X:SPC UP/DN:MOV B:END", COL_YELLOW);
     } else {
-        draw_text(4, 20, "ENEMY TURN...", COL_WHITE);
+        draw_text(4, 8, "ENEMY TURN...", COL_WHITE);
     }
+    render_text(BATTLE_TILE2, 15);
 
-    render_text(DIALOG_TILE, 20);
-    for(uint8_t i = 0; i < 20; i++) {
-        draw_tilemap(2 + i, 13, DIALOG_TILE + i);
+
+    for(uint8_t i = 0; i < 15; i++) {
+        if(i<12) draw_tilemap(2 + i, 12, BATTLE_TILE + i);
+        draw_tilemap(2 + i, 13, BATTLE_TILE2 + i);
     }
     render_tilemap(0);
 }

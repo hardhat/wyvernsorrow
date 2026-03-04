@@ -17,6 +17,7 @@ bool held[MAX_INPUT];
 
 static uint8_t current_room = WROOM_TOWN;
 static uint8_t choice_index = 0;
+static uint8_t last_choice_index;
 static bool choice_has_battle = false;
 
 #define FIRST_ROOM WROOM_TOWN
@@ -313,6 +314,7 @@ void draw_game(void)
 void init_choice(void)
 {
     choice_index = 0;
+    last_choice_index = 255;
     choice_has_battle = false;
     if (world.type[game.choice_target] == WTYPE_BOSS || (game.choice_target >= 64 && game.choice_target <= 79)) {
         if (!wobj_has_flag(game.choice_target, WFLAG_DEFEATED)) {
@@ -361,23 +363,27 @@ void draw_choice(void)
 {
     draw_game();
 
-    clear_text_tiles(COL_BLACK, 20);
     set_font(FONT_FLAMBOYANT);
-    
-    draw_text_opaque(4, 0, (choice_index == 0) ? "> Talk" : "  Talk", COL_WHITE, COL_BLUE);
-    if (choice_has_battle) {
-        draw_text_opaque(4, 8, (choice_index == 1) ? "> Battle" : "  Battle", COL_WHITE, COL_BLUE);
-        draw_text_opaque(4, 16, (choice_index == 2) ? "> Done" : "  Done", COL_WHITE, COL_BLUE);
-    } else {
-        draw_text_opaque(4, 8, (choice_index == 1) ? "> Done" : "  Done", COL_WHITE, COL_BLUE);
-    }
 
-    render_text(DIALOG_TILE, 20);
-    // Draw tiles at the bottom
-    for(uint8_t i = 0; i < 20; i++) {
-        draw_tilemap(2 + i, 13, DIALOG_TILE + i);
+    if(choice_index != last_choice_index) {
+        clear_text_tiles(COL_BLACK, 10);
+        draw_text_opaque(4, 0, (choice_index == 0) ? "> Talk  " : "  Talk  ", COL_WHITE, COL_BLUE);
+        if (choice_has_battle) {
+            draw_text_opaque(4, 8, (choice_index == 1) ? "> Battle" : "  Battle", COL_WHITE, COL_BLUE);
+            draw_text_opaque(5*16+4, 0, (choice_index == 2) ? "> Done  " : "  Done  ", COL_WHITE, COL_BLUE);
+        } else {
+            draw_text_opaque(4, 8, (choice_index == 1) ? "> Done  " : "  Done  ", COL_WHITE, COL_BLUE);
+        }
+
+        render_text(DIALOG_TILE, 10);
+        // Draw tiles at the bottom
+        for(uint8_t i = 0; i < 5; i++) {
+            draw_tilemap(2 + i, 13, DIALOG_TILE + i);
+            draw_tilemap(2 + i, 14, DIALOG_TILE +5 + i);
+        }
+        render_tilemap(0);
     }
-    render_tilemap(0);
+    last_choice_index = choice_index;
 }
 
 
