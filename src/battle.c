@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define BATTLE_TILE 0x80
-#define BATTLE_TILE2 0x8B
+#define BATTLE_TILE2 0x90
 
 static Combatant p_combatant;
 static Combatant e_combatant;
