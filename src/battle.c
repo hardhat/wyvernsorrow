@@ -51,6 +51,7 @@ void init_battle(void)
 
     // Draw the battle background
     fill_tilemap(TILE_OVERMAP_GRASS, 0, 0, 20, 12);
+    fill_tilemap(TILE_WOOD_FLOOR, 6, 1, 8, 8);
     fill_tilemap(COL_BLACK, 0, 12, 20, 3);  // Clear the bottom of the screen
 
     clear_sprites();
