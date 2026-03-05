@@ -69,9 +69,7 @@ void game_show_dialog(const char *text)
 static void game_clear_dialog(void)
 {
     // Remove the dialog tiles from the tilemap.
-    for(uint8_t i = 0; i < 16; i++) {
-        draw_tilemap(2 + i, 14, TILE_OVERMAP_GRASS);
-    }
+    fill_tilemap(TILE_OVERMAP_GRASS,0,14,20,1);
     render_tilemap(0);
 }
 
