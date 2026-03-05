@@ -34,15 +34,30 @@ void draw_text(uint16_t x, uint8_t y, const char *t, uint8_t c) { printf("DRAW T
 void draw_text_opaque(uint16_t x, uint8_t y, const char *t, uint8_t f, uint8_t b) {}
 void render_text(uint8_t t, uint8_t c) {}
 void draw_tilemap(uint16_t x, uint8_t y, uint8_t t) {}
+void fill_tilemap(uint8_t t, uint16_t x, uint8_t y, uint8_t w, uint8_t h) {}
 void render_tilemap(uint8_t l) {}
+
+void clear_sprites() {}
+void reset_sprite() {}
+void add_sprite(uint16_t x, uint8_t y, uint8_t t) {}
+void render_sprites() {}
 
 // Include battle.c
 #include "battle.c"
+
+void pump_animations() {
+    int timeout = 200;
+    while(timeout--) {
+        update_battle();
+        if (p_anim_timer == 0 && e_anim_timer == 0 && !fireball_active && dmg_timer == 0 && !waiting_for_enemy) break;
+    }
+}
 
 void test_battle_logic() {
     printf("Testing battle logic...\n");
     game.player.type = PLAYER_TYPE_SWORDSMAN;
     game.choice_target = 112; // WBOSS_OGRE
+    world.type[112] = 10; // Not a player class
     
     init_battle();
     
@@ -55,6 +70,7 @@ void test_battle_logic() {
     // atk(5) + range(-2) - def(1) = 2 damage
     uint8_t start_hp = e_combatant.hp;
     input_battle(INPUT_A, true); 
+    pump_animations();
     assert(e_combatant.hp == (start_hp - 2));
     assert(player_turn == false);
 
@@ -63,19 +79,20 @@ void test_battle_logic() {
     // e_atk(4) + range(0) - p_def(2) = 2 damage
     uint8_t p_start_hp = p_combatant.hp;
     printf("Running update_battle (Enemy turn)...\n");
-    update_battle(); 
+    pump_animations(); 
     assert(p_combatant.hp == (p_start_hp - 2));
     assert(player_turn == true);
 
     // Test Move Forward
     p_combatant.position = POS_MID;
     input_battle(INPUT_UP, true);
+    pump_animations();
     assert(p_combatant.position == POS_FRONT);
     assert(player_turn == false);
 
     // Run update_battle (Enemy moves to match Player)
     printf("Running update_battle (Enemy moves to FRONT)...\n");
-    update_battle(); 
+    pump_animations(); 
     assert(e_combatant.position == POS_FRONT);
     assert(player_turn == true);
 
@@ -84,6 +101,7 @@ void test_battle_logic() {
     // atk(5) + range(2) - def(1) = 6 damage
     start_hp = e_combatant.hp;
     input_battle(INPUT_A, true);
+    pump_animations();
     assert(e_combatant.hp == (start_hp - 6));
 
     printf("Battle logic basic tests passed!\n");
@@ -94,9 +112,11 @@ void test_battle_logic() {
     init_battle(); 
     assert(p_combatant.position == POS_MID);
     input_battle(INPUT_UP, true); // Should be free
+    pump_animations();
     assert(p_combatant.position == POS_FRONT);
     assert(player_turn == true); // Still player turn!
     input_battle(INPUT_A, true); // Now should end turn
+    pump_animations();
     assert(player_turn == false);
 
     // Test Swordsman Counter
@@ -106,14 +126,13 @@ void test_battle_logic() {
     p_combatant.position = POS_FRONT;
     e_combatant.position = POS_FRONT;
     input_battle(INPUT_X, true); // Special -> Guard stance
+    pump_animations();
     assert(p_combatant.stance == STANCE_SPECIAL);
-    assert(player_turn == false);
+    assert(player_turn == true); // Enemy already attacked during pump
     
-    // Enemy attacks
-    uint8_t e_start_hp = e_combatant.hp;
-    update_battle(); // Enemy attacks
     // Counter should deal atk/2 = 2 damage to enemy
-    assert(e_combatant.hp == (e_start_hp - 2));
+    // e_start_hp was 15, so should be 13
+    assert(e_combatant.hp == 13);
 
     // Test Momentum Extra Turn
     printf("Testing Momentum extra turn...\n");
@@ -121,6 +140,7 @@ void test_battle_logic() {
     init_battle();
     p_combatant.momentum = 6;
     input_battle(INPUT_A, true); // +2 momentum -> 8 -> Extra turn
+    pump_animations();
     assert(p_combatant.momentum == 0);
     assert(player_turn == true); // Got extra turn!
 

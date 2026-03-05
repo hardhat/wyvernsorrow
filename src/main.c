@@ -31,7 +31,8 @@ gfx_context ctx;
 bool pressed = true;
 bool quit = false;
 
-int sprite_count=0;
+uint8_t sprite_count=0;
+uint8_t last_sprite_count=0;
 gfx_sprite sprites[128];
 
 // The drawing surface is 16 tiles with 16x16 pixels each
@@ -422,6 +423,7 @@ void render_tilemap(uint8_t layer)
 
 void reset_sprite(void)
 {
+    last_sprite_count = sprite_count;
     sprite_count=0;
     memset(sprites, 0, sizeof(sprites));
 }
@@ -438,7 +440,9 @@ void add_sprite(uint16_t x, uint8_t y, uint8_t sprite)
 
 void render_sprites(void)
 {
-    gfx_sprite_render_array(&ctx, 0, sprites, sprite_count);
+    uint8_t count = sprite_count;
+    if(count < last_sprite_count) count = last_sprite_count;
+    gfx_sprite_render_array(&ctx, 0, sprites, count);
 }
 
 void clear_sprites(void)
