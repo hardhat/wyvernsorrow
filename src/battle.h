@@ -35,6 +35,7 @@ typedef struct {
     int8_t momentum;
     uint8_t statusFlags;
     uint8_t objectId; // WORLD_OBJECT_ID
+    uint8_t spriteId;
 } Combatant;
 
 void init_battle(void);

@@ -13,10 +13,12 @@ static Combatant e_combatant;
 static bool player_turn = true;
 static bool extra_turn_pending = false;
 static bool wyvern_free_move_used = false;
+static bool stats_updated = false;
 
 void init_battle(void)
 {
     // Initialize player combatant
+    p_combatant.objectId = WOBJ_PLAYER;
     p_combatant.classType = game.player.type;
     p_combatant.hp = 20;
     p_combatant.maxHp = 20;
@@ -27,10 +29,11 @@ void init_battle(void)
     p_combatant.stance = STANCE_DEFAULT;
     p_combatant.momentum = 0;
     p_combatant.statusFlags = 0;
+    p_combatant.spriteId = game.player.type==PLAYER_TYPE_SWORDSMAN?TILE_PC_SWORDSMAN:game.player.type==PLAYER_TYPE_MAGE?TILE_PC_MAGE:TILE_PC_WYVERN;
 
     // Initialize enemy combatant based on choice_target
     e_combatant.objectId = game.choice_target;
-    e_combatant.classType = 0xFF; // Neutral/Monster
+    e_combatant.classType = world.type[game.choice_target]; // Neutral/Monster
     e_combatant.hp = 15;
     e_combatant.maxHp = 15;
     e_combatant.atk = 4;
@@ -40,11 +43,20 @@ void init_battle(void)
     e_combatant.stance = STANCE_DEFAULT;
     e_combatant.momentum = 0;
     e_combatant.statusFlags = 0;
+    e_combatant.spriteId = world.sprite[game.choice_target]; 
 
     player_turn = (p_combatant.spd >= e_combatant.spd);
     extra_turn_pending = false;
     wyvern_free_move_used = false;
+
+    // Draw the battle background
+    fill_tilemap(TILE_OVERMAP_GRASS, 0, 0, 20, 12);
+    fill_tilemap(COL_BLACK, 0, 12, 20, 3);  // Clear the bottom of the screen
+
+    clear_sprites();
+
     debug_log("Battle initialized.");
+    stats_updated = true;   // Initialize the stats display
 }
 
 static int range_modifier(Combatant* a, Combatant* d)
@@ -188,6 +200,7 @@ void input_battle(uint8_t key, bool down)
         } else {
             player_turn = false;
         }
+        stats_updated = true;
     }
 }
 
@@ -214,34 +227,68 @@ void update_battle(void)
         }
         player_turn = true;
         wyvern_free_move_used = false;
+        stats_updated = true;
     }
 }
 
 void draw_battle(void)
 {
     char buffer[64];
-    clear_text_tiles(COL_BLACK, 12);
-    
-    sprintf(buffer, "HP:%d POS:%d MOM:%d", p_combatant.hp, p_combatant.position, p_combatant.momentum);
-    draw_text(4, 0, buffer, COL_WHITE);
-    
-    sprintf(buffer, "ENM HP:%d POS:%d", e_combatant.hp, e_combatant.position);
-    draw_text(4, 8, buffer, COL_RED);
-    render_text(BATTLE_TILE, 12);
 
-    clear_text_tiles(COL_BLACK, 15);
-    if (p_combatant.stance == STANCE_SPECIAL) draw_text(32, 0, "STANCE", COL_YELLOW);
-    if (player_turn) {
-        draw_text(4, 8, "A:ATK X:SPC UP/DN:MOV B:END", COL_YELLOW);
-    } else {
-        draw_text(4, 8, "ENEMY TURN...", COL_WHITE);
+    if(stats_updated) {
+        clear_text_tiles(COL_BLACK, 12);
+
+        sprintf(buffer, "HP:%d POS:%d MOM:%d", p_combatant.hp, p_combatant.position, p_combatant.momentum);
+        draw_text(4, 0, buffer, COL_WHITE);
+
+        sprintf(buffer, "ENM HP:%d POS:%d", e_combatant.hp, e_combatant.position);
+        draw_text(4, 8, buffer, COL_RED);
+        render_text(BATTLE_TILE, 12);
+
+        clear_text_tiles(COL_BLACK, 15);
+        if (p_combatant.stance == STANCE_SPECIAL) draw_text(32, 0, "STANCE", COL_YELLOW);
+        if (player_turn) {
+            draw_text(4, 8, "A:ATK X:SPC UP/DN:MOV B:END", COL_YELLOW);
+        } else {
+            draw_text(4, 8, "ENEMY TURN...", COL_WHITE);
+        }
+        render_text(BATTLE_TILE2, 15);
+
+        for(uint8_t i = 0; i < 15; i++) {
+            if(i<12) draw_tilemap(2 + i, 12, BATTLE_TILE + i);
+            draw_tilemap(2 + i, 13, BATTLE_TILE2 + i);
+        }
+        render_tilemap(0);
+
+        stats_updated = false;
     }
-    render_text(BATTLE_TILE2, 15);
-
-
-    for(uint8_t i = 0; i < 15; i++) {
-        if(i<12) draw_tilemap(2 + i, 12, BATTLE_TILE + i);
-        draw_tilemap(2 + i, 13, BATTLE_TILE2 + i);
+    // Draw sprites
+    reset_sprite();
+    // Draw player sprite   
+    add_sprite(152, 96 + (p_combatant.position<<4), p_combatant.spriteId);
+    // Draw enemy sprite
+    uint8_t size=1;
+    uint8_t stride=1;
+    if(e_combatant.objectId==WDEMONLORD) {
+        size=4;
+        stride=1;
+    } else if(e_combatant.classType==WTYPE_BOSS) {
+        size=2;
+        stride=8;
     }
-    render_tilemap(0);
+    uint8_t tile=e_combatant.spriteId;
+    uint16_t y = 72 - (size<<4) - (p_combatant.position<<4);
+    for(uint8_t i=0;i<size;i++) {
+        uint16_t x = 152;
+        if(size==4) x-=32;
+        else if(size==2) x-=16;
+        for(uint8_t j=0;j<size;j++) {
+            add_sprite(x, y, tile);
+            x+=16;
+            tile++;
+        }
+        y+=16;
+        tile+=stride;
+    }
+    render_sprites();
 }

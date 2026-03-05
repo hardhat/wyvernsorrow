@@ -310,8 +310,15 @@ void draw_text_pixel(uint16_t x, uint8_t y,uint8_t color)
     text_tiles[offset] = color;
 }
 
+void draw_text_pixel_offset(uint16_t offset, uint8_t color)
+{
+    if(offset<0 || offset>=256*20) return;  // Clip
+    text_tiles[offset] = color;
+}
+
 void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
 {
+#if 1
     uint8_t *ptr = font+((c-32)<<3);
     for(uint8_t i=0;i<8;i++)
     {
@@ -322,6 +329,22 @@ void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
                 draw_text_pixel(x+i, y+j, color);
         }
     }
+#else
+    uint16_t offset = ((x>>4)<<8)+(y<<4)+(x&0x0F);
+    uint8_t *ptr = font+((c-32)<<3);
+    uint8_t mask=0x80;
+    for(uint8_t i=0;i<8;i++)
+    {
+        uint16_t offset2 = offset+i;
+        for(uint8_t j=0;j<8;j++)
+        {
+            offset2 += 16;
+            if(ptr[j] & mask)
+                draw_text_pixel_offset(offset2, color);
+        }
+        mask >>= 1;
+    }
+#endif
 }
 
 void draw_text(uint16_t x, uint8_t y, const char *text, uint8_t color)
@@ -376,12 +399,16 @@ void draw_tilemap_array(uint16_t x, uint8_t y, uint8_t *tile, uint8_t count)
 
 void fill_tilemap(uint8_t tile,uint16_t x, uint8_t y, uint8_t w, uint8_t h)
 {
-    for(int i=0;i<w;i++)
+    uint16_t offset = (y*tilemap_width)+x;
+    if(y+h>tilemap_height) h=tilemap_height-y;
+    if(x+w>tilemap_width) w=tilemap_width-x;
+    for(int i=0;i<h;i++)
     {
-        for(int j=0;j<h;j++)
+        for(int j=0;j<w;j++)
         {
-            tilemap0[(y+j)*tilemap_width+x+i] = tile;
+            tilemap0[offset+j] = tile;
         }
+        offset += tilemap_width;
     }
 }
 
