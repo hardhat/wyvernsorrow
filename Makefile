@@ -35,7 +35,7 @@ img/%.zts: img/%.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -z -i $<
 
 img/%.zts.zx0: img/%.zts
-	zx0 $<
+	zx0 -f $<
 
 #img/demonlord.zts: img/demonlord.gif
 #	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4

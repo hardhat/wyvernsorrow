@@ -25,6 +25,7 @@ static uint8_t anim_type = 0; // 0=none, 1=move, 2=attack
 static int16_t dmg_offY = 0;
 static int dmg_timer = 0;
 static int dmg_val = 0;
+static int last_dmg_val = -1;
 static bool dmg_is_enemy = false;
 
 static bool fireball_active = false;
@@ -307,14 +308,17 @@ void update_battle(void)
             }
         }
         e_anim_timer--;
-        if (e_anim_timer == 0) player_turn = true;
+        if (e_anim_timer == 0) {
+            player_turn = true;
+            stats_updated = true;
+        }
         return;
     }
 
     if (fireball_active) {
         if (fireball_timer > 0) {
             fireball_timer--;
-            // Drift logic could go here
+            fireball_y -= 2;
             return;
         }
         fireball_active = false;
@@ -429,11 +433,14 @@ void draw_battle(void)
 
     // Draw Damage Float
     if (dmg_timer > 0) {
-        sprintf(buffer, "-%d", dmg_val);
-        // Use a temporary text tile for the damage sprite
-        clear_text_tiles(COL_BLACK, 2);
-        draw_text(0, 4, buffer, COL_RED);
-        render_text(0xD0, 2); // Use tiles 0xD0-0xD1 for damage
+	if(last_dmg_val!=dmg_val) {
+		last_dmg_val = dmg_val;
+		sprintf(buffer, "-%d", dmg_val);
+		// Use a temporary text tile for the damage sprite
+		clear_text_tiles(COL_BLACK, 2);
+		draw_text(0, 4, buffer, COL_RED);
+		render_text(0xD0, 2); // Use tiles 0xD0-0xD1 for damage
+	}
         
         uint16_t dX = 152;
         uint16_t dY = dmg_is_enemy ? (72 - (p_combatant.position<<4) - 32) : (96 + (p_combatant.position<<4));
