@@ -25,6 +25,7 @@ struct Game
 extern struct Game game;
 
 void init_game(void);
+void resume_game(void);
 void input_game(uint8_t key, bool down);
 void update_game(void);
 void draw_game(void);

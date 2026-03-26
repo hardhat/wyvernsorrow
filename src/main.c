@@ -67,14 +67,17 @@ void debug_logf(const char *format, ...)
 
 void set_state(enum GAME_STATE state)
 {
-
     switch(state)
     {
         case GAME_STATE_MENU:
             init_menu();
             break;
         case GAME_STATE_GAME:
-            init_game();
+            // Only do a full init when coming from the menu; otherwise just restore the room.
+            if(game_state == GAME_STATE_MENU)
+                init_game();
+            else
+                resume_game();
             break;
         case GAME_STATE_CHOICE:
             init_choice();

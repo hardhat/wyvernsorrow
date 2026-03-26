@@ -177,6 +177,15 @@ static uint8_t find_interactable_at(uint8_t room, uint8_t tile_x, uint8_t tile_y
 #define MAX_ACTIONS_PER_TURN 3
 #define DISTRICTS_FOR_WIN 35  // 70% of 49 districts
 
+void resume_game(void)
+{
+    set_font(FONT_FLAMBOYANT);
+    game_clear_dialog();
+    draw_room_map(current_room);
+    draw_room_name(current_room);
+    game.choice_target = WOBJ_NONE;
+}
+
 void init_game(void)
 {
     debug_log("Game started.");
