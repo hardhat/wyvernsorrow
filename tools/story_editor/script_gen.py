@@ -41,6 +41,7 @@ OBJS = {
     "WNPC_OLD_MAN": 40,
     "WNPC_KING": 41,
     "WNPC_MERCHANT": 42,
+    "WNPC_KING": 41,
     # Enemies
     "WENT_GOBLIN": 64,
     "WENT_ORC": 65,

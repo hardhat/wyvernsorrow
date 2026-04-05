@@ -1,6 +1,16 @@
 {
     "scripts": {
-        "WNPC_MERCHANT": [["END"]],
+        "WNPC_MERCHANT": [
+            ["IF_FLAG_GOTO", "WNPC_MERCHANT", "WFLAG_TALKED", "repeat"],
+            ["SAY", "Welcome! Have you\njoined Gold-Tier yet?"],
+            ["SAY", "Only 9,999 points\nfor the Hero Bundle!"],
+            ["SET_FLAG", "WNPC_MERCHANT", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "repeat"],
+            ["SAY", "The invasion? Minor\nsupply disruption. Fine."],
+            ["SAY", "Your loyalty points\ndo not expire. Mostly."],
+            ["END"]
+        ],
         "WITEM_FISH":    [["END"]],
 
         "WENT_WEREWOLF": [
@@ -44,6 +54,13 @@
             ["MOVE", "WNPC_LITTLE_GIRL", "WROOM_TOWN"],
             ["END"],
             ["LABEL", "done"],
+            ["IF_FLAG_GOTO", "WNPC_LITTLE_GIRL", "WFLAG_TALKED", "town_repeat"],
+            ["SAY", "Your performance was\nadequate. Barely."],
+            ["SAY", "I've catalogued your\nfaults. Twelve so far."],
+            ["SET_FLAG", "WNPC_LITTLE_GIRL", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "town_repeat"],
+            ["SAY", "Status unchanged.\nStill watching. Always."],
             ["END"]
         ],
 
@@ -90,6 +107,13 @@
             ["MOVE", "WNPC_OLD_MAN", "WROOM_TOWN"],
             ["END"],
             ["LABEL", "done"],
+            ["IF_FLAG_GOTO", "WNPC_OLD_MAN", "WFLAG_TALKED", "town_repeat"],
+            ["SAY", "Here, take this vial.\nPotion of Fog. Mild."],
+            ["SAY", "I think. It may be\nPickle Brine (Strong)."],
+            ["SET_FLAG", "WNPC_OLD_MAN", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "town_repeat"],
+            ["SAY", "Found another! Here.\nBaldness Cure (Dense)."],
             ["END"]
         ],
 
@@ -132,6 +156,7 @@
             ["END"],
             ["LABEL", "repeat"],
             ["SAY", "'Still here? Good. Have you\nconsidered this composition?'"],
+            ["SAY", "'Three weeks. Just\nthe rust. Count each rivet.'"],
             ["END"]
         ],
 
@@ -176,6 +201,12 @@
             ["MOVE", "WNPC_CARPENTER", "WROOM_TOWN"],
             ["END"],
             ["LABEL", "done"],
+            ["IF_FLAG_GOTO", "WNPC_CARPENTER", "WFLAG_TALKED", "town_repeat"],
+            ["SAY", "I built a second door.\nTo the well. Safety."],
+            ["SET_FLAG", "WNPC_CARPENTER", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "town_repeat"],
+            ["SAY", "New project: a shelf\ninside the drawbridge."],
             ["END"]
         ],
 
@@ -225,6 +256,13 @@
             ["MOVE", "WNPC_MOTHER", "WROOM_TOWN"],
             ["END"],
             ["LABEL", "done"],
+            ["IF_FLAG_GOTO", "WNPC_MOTHER", "WFLAG_TALKED", "town_repeat"],
+            ["SAY", "Sit down. *heals*\nYou're being dramatic."],
+            ["SAY", "Last month: plague.\nAnd a splinter. Alone."],
+            ["SET_FLAG", "WNPC_MOTHER", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "town_repeat"],
+            ["SAY", "Again? *sighs* Some\nof us never rest."],
             ["END"]
         ],
 
@@ -275,6 +313,13 @@
             ["MOVE", "WNPC_FATHER", "WROOM_TOWN"],
             ["END"],
             ["LABEL", "done"],
+            ["IF_FLAG_GOTO", "WNPC_FATHER", "WFLAG_TALKED", "town_repeat"],
+            ["SAY", "The sword. *sharpens*\nPromise me: eat first."],
+            ["SAY", "And the scarf. And\nhome before eight."],
+            ["SET_FLAG", "WNPC_FATHER", "WFLAG_TALKED"],
+            ["END"],
+            ["LABEL", "town_repeat"],
+            ["SAY", "*sharpens* The scarf?\nSatisfactory. Barely."],
             ["END"]
         ],
 
@@ -325,7 +370,7 @@
             ["CLEAR_FLAG", "WENT_GHOST", "WFLAG_VISIBLE"],
             ["END"],
             ["LABEL", "defeated"],
-            ["SAY", "He hovers, dejected.\n'I really thought the wail was good.'"],
+            ["SAY", "He hovers, dejected.\n'The wail was good. I know it was.'"],
             ["END"]
         ],
 
@@ -487,7 +532,12 @@
     },
     "scenes": {
         "town_map": {
-            "WNPC_MERCHANT": "WNPC_MERCHANT"
+            "WNPC_MERCHANT":    "WNPC_MERCHANT",
+            "WNPC_LITTLE_GIRL": "WNPC_LITTLE_GIRL",
+            "WNPC_OLD_MAN":     "WNPC_OLD_MAN",
+            "WNPC_CARPENTER":   "WNPC_CARPENTER",
+            "WNPC_MOTHER":      "WNPC_MOTHER",
+            "WNPC_FATHER":      "WNPC_FATHER"
         },
         "forest_map": {
             "WENT_WEREWOLF":    "WENT_WEREWOLF",

@@ -153,20 +153,20 @@ Each rescued NPC reacts in character. One or two lines per player.
 
 Short lines for when you speak to each NPC after they've returned to Town.
 
-- [ ] **5.1** Little Girl in Town (repeat visits)
-- [ ] **5.2** Old Man in Town (always references a different wrong potion)
-- [ ] **5.3** Carpenter in Town (always building something unnecessary)
-- [ ] **5.4** Mother in Town (competitive suffering triggered by your current HP)
-- [ ] **5.5** Father in Town (sharpens your sword; makes you promise something first)
-- [ ] **5.6** Merchant in Town (loyalty points arc; treats demon invasion as "supply disruption")
-- [ ] **5.7** King in Castle — repeat visit dialog (depends on Phase 2.6 decision)
-- [ ] **5.8** Add `WNPC_KING` to `OBJS` in `script_gen.py` (currently missing)
+- [x] **5.1** Little Girl in Town (repeat visits)
+- [x] **5.2** Old Man in Town (always references a different wrong potion)
+- [x] **5.3** Carpenter in Town (always building something unnecessary)
+- [x] **5.4** Mother in Town (competitive suffering triggered by your current HP)
+- [x] **5.5** Father in Town (sharpens your sword; makes you promise something first)
+- [x] **5.6** Merchant in Town (loyalty points arc; treats demon invasion as "supply disruption")
+- [x] **5.7** King in Castle — repeat visit dialog (depends on Phase 2.6 decision)
+- [x] **5.8** Add `WNPC_KING` to `OBJS` in `script_gen.py` (currently missing)
 
 ---
 
 ## Phase 6 — Integration
 
-- [ ] **6.1** Add all new scripts to `script.json`
-- [ ] **6.2** Add all scene-to-script mappings to `script.json` `"scenes"` block
-- [ ] **6.3** Run `script_gen.py` and verify `src/script.h` compiles without error
-- [ ] **6.4** Verify text lengths fit the in-game dialog box (count chars per line)
+- [x] **6.1** Add all new scripts to `script.json`
+- [x] **6.2** Add all scene-to-script mappings to `script.json` `"scenes"` block
+- [x] **6.3** Run `dat_gen.py` and verify `bin/wsorrow.dat` builds without error
+- [x] **6.4** Verify text lengths fit the in-game dialog box (≤36 chars per line)
