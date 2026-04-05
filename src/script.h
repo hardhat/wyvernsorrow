@@ -6,6 +6,7 @@
 // ---- Strings ----
 
 static const char * const story_strings[] = {
+    "", // 0
 };
 
 // ---- Scripts ----
