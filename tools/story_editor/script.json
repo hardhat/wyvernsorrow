@@ -27,7 +27,25 @@
             ["END"]
         ],
 
-        "WNPC_LITTLE_GIRL": [["END"]],
+        "WNPC_LITTLE_GIRL": [
+            ["IF_FLAG_GOTO", "WNPC_LITTLE_GIRL", "WFLAG_RESCUED", "done"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_SWORDSMAN", "branch_sw"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_MAGE", "branch_mg"],
+            ["SAY", "Air drop. Sound plan.\nI mapped it earlier."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_sw"],
+            ["SAY", "Crude. Effective.\nI suppose that works."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_mg"],
+            ["SAY", "Passable. I'd have\ntargeted the joints."],
+            ["LABEL", "rescue"],
+            ["SET_FLAG", "WNPC_LITTLE_GIRL", "WFLAG_RESCUED"],
+            ["CLEAR_FLAG", "WNPC_LITTLE_GIRL", "WFLAG_CAPTIVE"],
+            ["MOVE", "WNPC_LITTLE_GIRL", "WROOM_TOWN"],
+            ["END"],
+            ["LABEL", "done"],
+            ["END"]
+        ],
 
         "WBOSS_OGRE": [
             ["IF_FLAG_GOTO", "WBOSS_OGRE", "WFLAG_DEFEATED", "defeated"],
@@ -52,7 +70,28 @@
             ["END"]
         ],
 
-        "WNPC_OLD_MAN": [["END"]],
+        "WNPC_OLD_MAN": [
+            ["IF_FLAG_GOTO", "WNPC_OLD_MAN", "WFLAG_RESCUED", "done"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_SWORDSMAN", "branch_sw"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_MAGE", "branch_mg"],
+            ["SAY", "A dragon! Wait... er.\nA friendly one? Hello."],
+            ["SAY", "Here. This... powder.\nProbably safe. Thanks."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_sw"],
+            ["SAY", "My hero! Here, take\nthis. It's, uh... hmm."],
+            ["SAY", "Swamp Gas (Strong).\nClose enough. Thanks."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_mg"],
+            ["SAY", "A wizard! Here \u2014\na vial! Take it. Uh."],
+            ["SAY", "Potion of... uh...\nI forget. Still good."],
+            ["LABEL", "rescue"],
+            ["SET_FLAG", "WNPC_OLD_MAN", "WFLAG_RESCUED"],
+            ["CLEAR_FLAG", "WNPC_OLD_MAN", "WFLAG_CAPTIVE"],
+            ["MOVE", "WNPC_OLD_MAN", "WROOM_TOWN"],
+            ["END"],
+            ["LABEL", "done"],
+            ["END"]
+        ],
 
         "WENT_SILVER_KNIGHT": [
             ["IF_FLAG_GOTO", "WENT_SILVER_KNIGHT", "WFLAG_DEFEATED", "defeated"],
@@ -120,7 +159,25 @@
             ["END"]
         ],
 
-        "WNPC_CARPENTER": [["END"]],
+        "WNPC_CARPENTER": [
+            ["IF_FLAG_GOTO", "WNPC_CARPENTER", "WFLAG_RESCUED", "done"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_SWORDSMAN", "branch_sw"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_MAGE", "branch_mg"],
+            ["SAY", "Out! Those rafters \u2014\nCould you hold one up?"],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_sw"],
+            ["SAY", "Rescued! Good. Now,\ncan swords chip stone?"],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_mg"],
+            ["SAY", "Free! Now \u2014 that crack.\nBlast it. Just once."],
+            ["LABEL", "rescue"],
+            ["SET_FLAG", "WNPC_CARPENTER", "WFLAG_RESCUED"],
+            ["CLEAR_FLAG", "WNPC_CARPENTER", "WFLAG_CAPTIVE"],
+            ["MOVE", "WNPC_CARPENTER", "WROOM_TOWN"],
+            ["END"],
+            ["LABEL", "done"],
+            ["END"]
+        ],
 
         "WENT_GENIE": [
             ["IF_FLAG_GOTO", "WENT_GENIE", "WFLAG_DEFEATED", "defeated"],
@@ -148,7 +205,28 @@
             ["END"]
         ],
 
-        "WNPC_MOTHER": [["END"]],
+        "WNPC_MOTHER": [
+            ["IF_FLAG_GOTO", "WNPC_MOTHER", "WFLAG_RESCUED", "done"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_SWORDSMAN", "branch_sw"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_MAGE", "branch_mg"],
+            ["SAY", "Oh, stop. *heals*\nYou're all dramatic."],
+            ["SAY", "I once flew injured.\nIn winter. Nobody saw."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_sw"],
+            ["SAY", "Hold still. *heals*\nPatently a scratch."],
+            ["SAY", "I bled more last\nTuesday. Without help."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_mg"],
+            ["SAY", "Sit. *heals* You're\nquite pale, actually."],
+            ["SAY", "I gave birth in\na blizzard. Twice."],
+            ["LABEL", "rescue"],
+            ["SET_FLAG", "WNPC_MOTHER", "WFLAG_RESCUED"],
+            ["CLEAR_FLAG", "WNPC_MOTHER", "WFLAG_CAPTIVE"],
+            ["MOVE", "WNPC_MOTHER", "WROOM_TOWN"],
+            ["END"],
+            ["LABEL", "done"],
+            ["END"]
+        ],
 
         "WENT_ORC": [
             ["IF_FLAG_GOTO", "WENT_ORC", "WFLAG_DEFEATED", "defeated"],
@@ -177,7 +255,28 @@
             ["END"]
         ],
 
-        "WNPC_FATHER": [["END"]],
+        "WNPC_FATHER": [
+            ["IF_FLAG_GOTO", "WNPC_FATHER", "WFLAG_RESCUED", "done"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_SWORDSMAN", "branch_sw"],
+            ["IF_FLAG_GOTO", "WOBJ_PLAYER", "WFLAG_IS_MAGE", "branch_mg"],
+            ["SAY", "At that altitude?!\nYou could get a cold!"],
+            ["SAY", "Promise me you'll\nwear a warm scarf up."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_sw"],
+            ["SAY", "Oh, thank goodness.\nDid you stretch first?"],
+            ["SAY", "Promise me you'll\nbe home before eight."],
+            ["GOTO", "rescue"],
+            ["LABEL", "branch_mg"],
+            ["SAY", "You're safe! Are\nthose spell burns bad?"],
+            ["SAY", "Promise me you'll\nwear a fireproof scarf."],
+            ["LABEL", "rescue"],
+            ["SET_FLAG", "WNPC_FATHER", "WFLAG_RESCUED"],
+            ["CLEAR_FLAG", "WNPC_FATHER", "WFLAG_CAPTIVE"],
+            ["MOVE", "WNPC_FATHER", "WROOM_TOWN"],
+            ["END"],
+            ["LABEL", "done"],
+            ["END"]
+        ],
 
         "WENT_TROLL": [
             ["IF_FLAG_GOTO", "WENT_TROLL", "WFLAG_DEFEATED", "defeated"],

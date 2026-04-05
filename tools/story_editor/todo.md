@@ -141,11 +141,11 @@ taunt → branched victory → `END`. Also include a defeated-state (repeat visi
 
 Each rescued NPC reacts in character. One or two lines per player.
 
-- [ ] **4.1** Little Girl rescued — Swordsman, Mage, Wyvern (cold tactical gratitude)
-- [ ] **4.2** Old Man rescued — Swordsman, Mage, Wyvern (confused; tries to give the wrong item)
-- [ ] **4.3** Carpenter rescued — Swordsman, Mage, Wyvern (immediately lists renovation plans)
-- [ ] **4.4** Mother rescued — Swordsman, Mage, Wyvern (heals you, then one-ups the rescue)
-- [ ] **4.5** Father rescued — Swordsman, Mage, Wyvern (worried you hurt yourself doing it)
+- [x] **4.1** Little Girl rescued — Swordsman, Mage, Wyvern (cold tactical gratitude)
+- [x] **4.2** Old Man rescued — Swordsman, Mage, Wyvern (confused; tries to give the wrong item)
+- [x] **4.3** Carpenter rescued — Swordsman, Mage, Wyvern (immediately lists renovation plans)
+- [x] **4.4** Mother rescued — Swordsman, Mage, Wyvern (heals you, then one-ups the rescue)
+- [x] **4.5** Father rescued — Swordsman, Mage, Wyvern (worried you hurt yourself doing it)
 
 ---
 

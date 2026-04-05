@@ -29,6 +29,7 @@ FLAGS = {
 
 # Object Mapping (matching world.h)
 OBJS = {
+    "WROOM_TOWN": 0,
     "WOBJ_PLAYER": 32,
     "WNPC_SWORDSMAN": 33,
     "WNPC_MAGE": 34,
