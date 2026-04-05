@@ -1,9 +1,8 @@
 ZOS_PATH ?= ../Zeal-8-bit-OS
 ZVB_SDK_PATH ?= ../Zeal-VideoBoard-SDK
 BIN=bin/wyvern.bin
-OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/img.rel obj/map.rel obj/dzx0_standard.rel obj/battle.rel
-IMG=img/terrain.zts img/npc_pc.zts img/enemies.zts img/bosses.zts img/demonlord.zts
-IMGZX0=img/terrain.zts.zx0 img/npc_pc.zts.zx0 img/enemies.zts.zx0 img/bosses.zts.zx0 img/demonlord.zts.zx0
+OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/dat.rel obj/map.rel obj/battle.rel
+DAT=bin/wsorrow.dat
 CC=sdcc
 CFLAGS=-mz80 --std-c2x -c -I $(ZOS_PATH)/kernel_headers/sdcc/include/ -I $(ZVB_SDK_PATH)/include --codeseg TEXT --debug
 AS=sdasz80 -o -l -s
@@ -11,7 +10,7 @@ OBJCOPY=sdobjcopy
 LD=sdldz80
 LDFLAGS=-n -y -mjwx -i -b _HEADER=0x4000 -k $(ZOS_PATH)/kernel_headers/sdcc/lib -l z80 $(ZOS_LDFLAGS)
 ZOS_LIBS=-k $(ZVB_SDK_PATH)/lib -l zvb_sound -l zvb_gfx
-all: init $(BIN)
+all: init $(BIN) $(DAT)
 
 PHONY: init clean reallyclean
 
@@ -34,20 +33,17 @@ obj/%.rel: src/%.asm
 img/%.zts: img/%.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -z -i $<
 
-img/%.zts.zx0: img/%.zts
-	zx0 -f $<
+$(DAT): tools/dat_gen.py tools/story_editor/script.json img/*.zts img/*.ztp
+	python3 tools/dat_gen.py
 
-#img/demonlord.zts: img/demonlord.gif
-#	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -i $< -b 4
-
+obj/dat.rel: src/dat.c src/dat.h src/main.h
 obj/game.rel: src/game.c src/game.h src/main.h src/map.h
 obj/menu.rel: src/menu.c src/menu.h src/game.h
-obj/main.rel: src/main.c src/game.h src/menu.h src/img.h
+obj/main.rel: src/main.c src/game.h src/menu.h src/dat.h
 obj/world.rel: src/world.c src/world.h src/main.h src/world_entities.h
-obj/story.rel: src/story.c src/story.h src/world.h src/main.h
+obj/story.rel: src/story.c src/story.h src/world.h src/main.h src/dat.h
 obj/map.rel: src/map.c src/map.h src/main.h
 obj/battle.rel: src/battle.c src/battle.h src/game.h src/main.h src/world.h
-obj/img.rel: src/img.asm $(IMG) $(IMGZX0)
 
 clean:
 	-rm $(OBJ)

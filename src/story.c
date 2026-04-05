@@ -5,7 +5,7 @@
 #include "main.h"
 #include "story.h"
 #include "world.h"
-#include "script.h"
+#include "dat.h"
 
 // Bytecode VM
 // - Runs until it hits a SAY (shows text and stops), or END.
@@ -28,24 +28,6 @@ extern void game_show_dialog(const char *text);
 static uint16_t read_u16(const uint8_t *p)
 {
     return (uint16_t)p[0] | ((uint16_t)p[1] << 8);
-}
-
-static const uint8_t *get_script(uint8_t obj, uint8_t room, uint8_t player_type)
-{
-    // Simplified resolution: just map objects to their scripts regardless of room for now,
-    // as per script.json "scripts" key.
-    // In a full implementation, we'd use the "scenes" mapping.
-    (void)room;
-    (void)player_type;
-
-    switch(obj) {
-        case WNPC_MERCHANT: return script_WNPC_MERCHANT;
-        case WITEM_FISH: return script_WITEM_FISH;
-        case WBOSS_OGRE: return script_WBOSS_OGRE;
-        case WBOSS_LAND_DRAGON: return script_WBOSS_LAND_DRAGON;
-        case WBOSS_WIND_DRAGON: return script_WBOSS_WIND_DRAGON;
-        default: return 0;
-    }
 }
 
 // Simple word wrap helper for 40 column display.
@@ -105,8 +87,8 @@ static bool story_step(uint8_t obj, const uint8_t *script)
 
             case SOP_SAY: {
                 uint8_t sid = script[pc++];
-                const char *full_text = story_strings[sid];
-                game_show_dialog(full_text);
+                dat_load_string(sid);
+                game_show_dialog(script_cache.dialog);
                 world.state[obj] = pc;
                 return true;
             }
@@ -165,10 +147,12 @@ static bool story_step(uint8_t obj, const uint8_t *script)
 
 bool story_interact(uint8_t obj, uint8_t room, uint8_t player_type)
 {
-    const uint8_t *script = get_script(obj, room, player_type);
-    if(script == 0) {
+    (void)room;
+    (void)player_type;
+
+    if (!dat_load_script(obj)) {
         return false;
     }
 
-    return story_step(obj, script);
+    return story_step(obj, script_cache.bytecode);
 }
