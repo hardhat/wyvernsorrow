@@ -16,8 +16,8 @@ Based on the high-fantasy setting with a comedic twist.
 
 ### The Mother / Healer (WNPC_MOTHER)
 - **High Fantasy Aspect**: A high priestess of the eternal flame with unmatched restorative powers.
-- **Comedic Twist**: She heals people by aggressively "guilting" the wounds away. "Oh, you got stabbed by an Orc? Well, I had to stay up all night wondering where you were, so who's the real victim here?"
-- **Voice**: Sweet, melodic, but deeply passive-aggressive.
+- **Comedic Twist**: She is a relentless one-upper. No matter how grievous your wounds, she has suffered worse — and with considerably less fuss. Dragon fire burns? "I once grazed my knuckle on a *slightly warm* cauldron and nobody so much as glanced my way." She heals you without fail, but always with a sigh deep enough to extinguish a candle and a lingering look that implies you are being very dramatic about the whole near-death thing.
+- **Voice**: Warm and nurturing, but every sentence ends on a note of such profound, weary martyrdom that you feel guilty for surviving.
 
 ### The Old Man / Alchemist (WNPC_OLD_MAN)
 - **High Fantasy Aspect**: A sage with knowledge of every potion and poison in existence.

@@ -8,3 +8,4 @@ img/*.zts.zx0
 *.swp
 *.bak
 .vscode/
+/*.txt
