@@ -65,75 +65,75 @@ Structure: `IF_FLAG_GOTO` branch on player identity → player approach line →
 taunt → branched victory → `END`. Also include a defeated-state (repeat visit) line.
 
 ### 3.1 Forest — Werewolf (first encounter, all paths)
-- [ ] **3.1a** Swordsman: moves to overpower; Werewolf wags tail mid-transformation
-- [ ] **3.1b** Mage: tries a calming spell; Werewolf is confused but very hopeful
-- [ ] **3.1c** Wyvern: circles from above; Werewolf goes berserk wanting to give chase
+- [x] **3.1a** Swordsman: moves to overpower; Werewolf wags tail mid-transformation
+- [x] **3.1b** Mage: tries a calming spell; Werewolf is confused but very hopeful
+- [x] **3.1c** Wyvern: circles from above; Werewolf goes berserk wanting to give chase
 
 ### 3.2 Ogre Lair — Ogre Boss (rescues Old Man)
-- [ ] **3.2a** Swordsman: direct duel; Ogre offended by the lack of culinary appreciation
-- [ ] **3.2b** Mage: fire spell; Ogre is delighted and asks for recipe tips
-- [ ] **3.2c** Wyvern: dive attack; Ogre complains about the dining experience being ruined
+- [x] **3.2a** Swordsman: direct duel; Ogre offended by the lack of culinary appreciation
+- [x] **3.2b** Mage: fire spell; Ogre is delighted and asks for recipe tips
+- [x] **3.2c** Wyvern: dive attack; Ogre complains about the dining experience being ruined
 
 ### 3.3 Castle — Silver Knight + King
-- [ ] **3.3a** Swordsman: formal rival duel challenge with Silver Knight; King reacts afterward
-- [ ] **3.3b** Mage: Silver Knight is contemptuous of magic, then humiliated by it; King reacts afterward
-- [ ] **3.3c** Wyvern: Silver Knight refuses to fight something "not on solid ground"; King reacts afterward
-- [ ] **3.3d** King dialog (all players) — depends on Phase 2.6 personality decision
+- [x] **3.3a** Swordsman: formal rival duel challenge with Silver Knight; King reacts afterward
+- [x] **3.3b** Mage: Silver Knight is contemptuous of magic, then humiliated by it; King reacts afterward
+- [x] **3.3c** Wyvern: Silver Knight refuses to fight something "not on solid ground"; King reacts afterward
+- [x] **3.3d** King dialog (all players) — depends on Phase 2.6 personality decision
 
 ### 3.4 Crypt — Skeleton (rescues Carpenter)
-- [ ] **3.4a** Swordsman: Skeleton tries to look threatening; wrong arm keeps falling off
-- [ ] **3.4b** Mage: Skeleton is fascinated by magic and briefly forgets to fight
-- [ ] **3.4c** Wyvern: Skeletons argue about whose leg is whose for the entire fight
+- [x] **3.4a** Swordsman: Skeleton tries to look threatening; wrong arm keeps falling off
+- [x] **3.4b** Mage: Skeleton is fascinated by magic and briefly forgets to fight
+- [x] **3.4c** Wyvern: Skeletons argue about whose leg is whose for the entire fight
 
 ### 3.5 Tower — Genie (rescues Mother)
-- [ ] **3.5a** Swordsman: Genie is delighted to be threatened; must file forms first
-- [ ] **3.5b** Mage: Genie tries to out-bureaucrat the Mage's spells; loses on a technicality
-- [ ] **3.5c** Wyvern: Genie rules Wyverns need a permit to fly indoors; fight is over the permit
+- [x] **3.5a** Swordsman: Genie is delighted to be threatened; must file forms first
+- [x] **3.5b** Mage: Genie tries to out-bureaucrat the Mage's spells; loses on a technicality
+- [x] **3.5c** Wyvern: Genie rules Wyverns need a permit to fly indoors; fight is over the permit
 
 ### 3.6 Cave — Orc (rescues Father)
-- [ ] **3.6a** Swordsman: tough brawl; Orc respects the fight
-- [ ] **3.6b** Mage: Orc laughs at magic, then doesn't
-- [ ] **3.6c** Wyvern: tight cave disadvantages the Wyvern; has to adapt
+- [x] **3.6a** Swordsman: tough brawl; Orc respects the fight
+- [x] **3.6b** Mage: Orc laughs at magic, then doesn't
+- [x] **3.6c** Wyvern: tight cave disadvantages the Wyvern; has to adapt
 
 ### 3.7 Ruins — Troll (write Phase 2.2 personality first)
-- [ ] **3.7a** Swordsman
-- [ ] **3.7b** Mage
-- [ ] **3.7c** Wyvern
+- [x] **3.7a** Swordsman
+- [x] **3.7b** Mage
+- [x] **3.7c** Wyvern
 
 ### 3.8 Shrine — Ghost (write Phase 2.3 personality first)
-- [ ] **3.8a** Swordsman
-- [ ] **3.8b** Mage
-- [ ] **3.8c** Wyvern
+- [x] **3.8a** Swordsman
+- [x] **3.8b** Mage
+- [x] **3.8c** Wyvern
 
 ### 3.9 Harbor — Dark Knight (write Phase 2.4 personality first)
-- [ ] **3.9a** Swordsman
-- [ ] **3.9b** Mage
-- [ ] **3.9c** Wyvern
+- [x] **3.9a** Swordsman
+- [x] **3.9b** Mage
+- [x] **3.9c** Wyvern
 
 ### 3.10 Mountain Pass — Land Dragon
-- [ ] **3.10a** Swordsman: tries to walk past the "boulder"; Land Dragon is offended
-- [ ] **3.10b** Mage: casts a reveal spell; Land Dragon is mortified
-- [ ] **3.10c** Wyvern: spots it from the air immediately; Dragon refuses to acknowledge this
+- [x] **3.10a** Swordsman: tries to walk past the "boulder"; Land Dragon is offended
+- [x] **3.10b** Mage: casts a reveal spell; Land Dragon is mortified
+- [x] **3.10c** Wyvern: spots it from the air immediately; Dragon refuses to acknowledge this
 
 ### 3.11 Volcano — Fire Dragon
-- [ ] **3.11a** Swordsman: interrupts a glass-blowing session; Dragon furious about the craft
-- [ ] **3.11b** Mage: casts fire magic; Dragon explains why that was "artistically offensive"
-- [ ] **3.11c** Wyvern: crash-lands near the kiln; Dragon's heartburn flares up from the stress
+- [x] **3.11a** Swordsman: interrupts a glass-blowing session; Dragon furious about the craft
+- [x] **3.11b** Mage: casts fire magic; Dragon explains why that was "artistically offensive"
+- [x] **3.11c** Wyvern: crash-lands near the kiln; Dragon's heartburn flares up from the stress
 
 ### 3.12 Sky Peak — Wind Dragon
-- [ ] **3.12a** Swordsman: Dragon stops fighting to gossip; Swordsman refuses to engage
-- [ ] **3.12b** Mage: trades gossip to create an opening; uses it
-- [ ] **3.12c** Wyvern: natural sky fight; Dragon is obsessed with Wyvern aerial gossip
+- [x] **3.12a** Swordsman: Dragon stops fighting to gossip; Swordsman refuses to engage
+- [x] **3.12b** Mage: trades gossip to create an opening; uses it
+- [x] **3.12c** Wyvern: natural sky fight; Dragon is obsessed with Wyvern aerial gossip
 
 ### 3.13 Swamp — Pumpkin Head
-- [ ] **3.13a** Swordsman: Pumpkin Head launches legal threats; Swordsman ignores them
-- [ ] **3.13b** Mage: accidentally says "pumpkin spice"; full legal deposition begins
-- [ ] **3.13c** Wyvern: Pumpkin Head tries to serve a subpoena mid-air; Wyvern just leaves
+- [x] **3.13a** Swordsman: Pumpkin Head launches legal threats; Swordsman ignores them
+- [x] **3.13b** Mage: accidentally says "pumpkin spice"; full legal deposition begins
+- [x] **3.13c** Wyvern: Pumpkin Head tries to serve a subpoena mid-air; Wyvern just leaves
 
 ### 3.14 Demon Gate — Demon Lord (final boss)
-- [ ] **3.14a** Swordsman: direct confrontation; Demon Lord complains about heroic clichés
-- [ ] **3.14b** Mage: disrupts the ritual; Demon Lord's back pain flares at the worst moment
-- [ ] **3.14c** Wyvern: aerial distraction; Demon Lord whines about "entitled flying youth"
+- [x] **3.14a** Swordsman: direct confrontation; Demon Lord complains about heroic clichés
+- [x] **3.14b** Mage: disrupts the ritual; Demon Lord's back pain flares at the worst moment
+- [x] **3.14c** Wyvern: aerial distraction; Demon Lord whines about "entitled flying youth"
 
 ---
 
