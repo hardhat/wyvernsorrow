@@ -32,8 +32,23 @@ static bool dat_seek(uint32_t offset)
 
 static bool dat_read(void *buf, uint16_t size)
 {
-    uint16_t n = size;
-    return read(dat_fd, buf, &n) == 0 && n == size;
+    // ZOS VFS read() must not cross a 16KB virtual page boundary.
+    // Split into two reads if the destination buffer straddles one.
+    uint16_t addr     = (uint16_t)(uintptr_t)buf;
+    uint16_t page_rem = (uint16_t)(0x4000u - (addr & 0x3FFFu));
+
+    if (page_rem >= size) {
+        uint16_t n = size;
+        return read(dat_fd, buf, &n) == 0 && n == size;
+    }
+
+    // First chunk: up to the page boundary
+    uint16_t n = page_rem;
+    if (read(dat_fd, buf, &n) != 0 || n != page_rem) return false;
+
+    // Second chunk: remainder at start of next page
+    n = size - page_rem;
+    return read(dat_fd, (uint8_t *)buf + page_rem, &n) == 0 && n == (size - page_rem);
 }
 
 // ---------------------------------------------------------------------------

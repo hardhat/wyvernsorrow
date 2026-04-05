@@ -34,8 +34,9 @@ uint8_t sprite_count=0;
 uint8_t last_sprite_count=0;
 gfx_sprite sprites[128];
 
-// The drawing surface is 16 tiles with 16x16 pixels each
-uint8_t text_tiles[256*16+1024];
+// The drawing surface is 16 tiles with 16x16 pixels each.
+// Pinned at 0xC000 (virtual page boundary) so dat reads never cross a page.
+__at(0xC000) uint8_t text_tiles[256*16+1024];
 const uint8_t *font = FONT_FLAMBOYANT_BITMAP;
 
 uint8_t tilemap0[20*15];
