@@ -49,12 +49,12 @@ flags (`WFLAG_IS_SWORDSMAN`, `WFLAG_IS_MAGE`, `WFLAG_IS_WYVERN`) set at characte
 These enemies have no personality notes in `npc_enemies.md` yet.
 Write a short comedic twist for each before scripting their encounters.
 
-- [ ] **2.1** ORC (`WENT_ORC`) — Cave guard blocking the Father
-- [ ] **2.2** TROLL (`WENT_TROLL`) — Ruins obstacle
-- [ ] **2.3** GHOST (`WENT_GHOST`) — Shrine obstacle
-- [ ] **2.4** DARK KNIGHT (`WENT_DARK_KNIGHT`) — Harbor obstacle
-- [ ] **2.5** SILVER KNIGHT (`WENT_SILVER_KNIGHT`) — Castle obstacle
-- [ ] **2.6** KING (`WNPC_KING`) — Castle NPC role (helpful, hostile, or useless?)
+- [x] **2.1** ORC (`WENT_ORC`) — Cave guard blocking the Father
+- [x] **2.2** TROLL (`WENT_TROLL`) — Ruins obstacle
+- [x] **2.3** GHOST (`WENT_GHOST`) — Shrine obstacle
+- [x] **2.4** DARK KNIGHT (`WENT_DARK_KNIGHT`) — Harbor obstacle
+- [x] **2.5** SILVER KNIGHT (`WENT_SILVER_KNIGHT`) — Castle obstacle
+- [x] **2.6** KING (`WNPC_KING`) — Castle NPC role (helpful, hostile, or useless?)
 
 ---
 

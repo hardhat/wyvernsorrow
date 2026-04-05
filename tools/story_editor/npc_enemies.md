@@ -29,9 +29,19 @@ Based on the high-fantasy setting with a comedic twist.
 - **Comedic Twist**: She is actually the most cold-blooded strategist in the party. She gives "adorable" drawings to enemies that are actually detailed tactical maps of their weaknesses.
 - **Voice**: High-pitched and cute, but says terrifyingly calculated things.
 
+### The King (WNPC_KING)
+- **High Fantasy Aspect**: A sovereign of ancient bloodline, whose word once commanded armies and shaped the fate of kingdoms.
+- **Comedic Twist**: He has fully checked out of governance and is now consumed by competitive miniature diorama painting. His throne room is carpeted in tiny, immaculately painted soldiers. He is technically still king — which means he can grant access, issue decrees, and bestow titles — but he will only do so if you first express sincere admiration for his "current project." He considers the demon invasion "a fascinating subject for a diorama, actually. The siege composition practically paints itself."
+- **Voice**: Distracted and vague, but ignites with terrifying, obsessive intensity the moment miniatures are mentioned.
+
 ---
 
 ## Enemies and Bosses
+
+### Silver Knight (WENT_SILVER_KNIGHT)
+- **High Fantasy Aspect**: The castle's elite guardian — a warrior of impeccable honor, legendary technique, and a pedigree that stretches back to the First Age.
+- **Comedic Twist**: He is catastrophically over-qualified and cannot stop reminding everyone of it. He graduated top of his class at the Royal Military Academy, once fought three dragons simultaneously before breakfast, and is currently guarding a single doorway in a besieged castle. He makes absolutely sure you understand this is beneath him before, during, and after the fight.
+- **Voice**: Clipped and precise, radiating barely-contained professional indignation.
 
 ### Werewolf (WENT_WEREWOLF)
 - **Comedic Twist**: A very "good boy" who is deeply conflicted. He wants to tear your throat out, but he *really* wants someone to throw a stick. He keeps accidentally wagging his tail during his "fearsome" transformation.
@@ -39,8 +49,28 @@ Based on the high-fantasy setting with a comedic twist.
 ### Ogre Boss (WBOSS_OGRE)
 - **Comedic Twist**: An aspiring gourmet chef. He’s not trying to eat you because he’s evil; he’s trying to find the "perfect seasoning" for adventurer meat. He gets very offended if you don't compliment his "reduction of swamp-moss."
 
+### Orc (WENT_ORC)
+- **High Fantasy Aspect**: A fearsome warrior of the deep caves, hardened by a lifetime of darkness and battle.
+- **Comedic Twist**: He is an extremely dedicated life coach. He believes every fight is a profound "opportunity for personal growth" and insists on a full debrief after every exchange of blows. "Good parry! Now — what *feeling* were you channeling there? Let's unpack that." He only guards the Father because it's part of his five-year professional development plan.
+- **Voice**: Gravelly and intimidating, but inexplicably well-read on productivity literature and emotional intelligence.
+
 ### Skeleton (WENT_SKELETON)
 - **Comedic Twist**: Constantly suffering from "bone-identity" issues. Skeletons often accidentally swap limbs mid-battle and spend three turns arguing about whose left tibia is whose.
+
+### Troll (WENT_TROLL)
+- **High Fantasy Aspect**: An ancient creature of earth and stone, bound to the ruins by a primordial curse older than the kingdom itself.
+- **Comedic Twist**: He is a furious historic preservationist. The ruins are a "site of immense cultural significance" and he is absolutely beside himself that adventurers keep breaking things. He will pause mid-fight to fill out a damage report. He hasn't allowed anyone past in three hundred years, mostly because the permit application process is backlogged.
+- **Voice**: Agitated and bureaucratic, constantly muttering about structural integrity and replacement stone costs.
+
+### Ghost (WENT_GHOST)
+- **High Fantasy Aspect**: A tormented spirit bound to the shrine, unable to pass on until an ancient wrong is righted.
+- **Comedic Twist**: He is a devastated performer. He has spent three centuries meticulously rehearsing his haunting — choreographing the wail, perfecting the cold-spot timing, workshopping the dramatic reveal — and nobody is scared. You just walked past his signature "wail of eternal sorrow" without flinching. He's not dangerous. He's professionally destroyed.
+- **Voice**: Theatrical and overwrought, like a stage actor giving a five-star performance to a completely empty house.
+
+### Dark Knight (WENT_DARK_KNIGHT)
+- **High Fantasy Aspect**: A once-noble knight who fell to shadow, now bound to the Demon Lord's will by an unbreakable dark covenant.
+- **Comedic Twist**: He is an insufferable networking fanatic. Even in the depths of his dark corruption, he cannot stop handing out embossed business cards and asking "so, what do you do?" He only fights you because it's a great conversation starter. His armor has a personal crest URL engraved near the pauldron. He will absolutely follow up by raven.
+- **Voice**: Menacing and formal, but every sentence eventually circles back to "synergies," "reaching out," and "keeping the door open."
 
 ### Genie (WENT_GENIE)
 - **Comedic Twist**: A disgruntled bureaucrat of the lamp. He hates his job and tries to fulfill wishes in the most literal, annoying way possible to encourage people to stop rubbing things.
