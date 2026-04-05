@@ -339,14 +339,14 @@ void draw_text_pixel(uint16_t x, uint8_t y,uint8_t color)
 
 void draw_text_pixel_offset(uint16_t offset, uint8_t color)
 {
-    if(offset<0 || offset>=256*20) return;  // Clip
+    if(offset>=256*20) return;  // Clip
     text_tiles[offset] = color;
 }
 
 void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
 {
 #if 1
-    uint8_t *ptr = font+((c-32)<<3);
+    const uint8_t *ptr = font+((c-32)<<3);
     for(uint8_t i=0;i<8;i++)
     {
         uint8_t mask = 1<<(7-i);
