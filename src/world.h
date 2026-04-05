@@ -85,12 +85,16 @@ enum WORLD_OBJECT_TYPE {
 };
 
 enum WORLD_FLAGS {
-    WFLAG_VISIBLE       = 0x0001,
-    WFLAG_INTERACTABLE  = 0x0002,
-    WFLAG_DEFEATED      = 0x0004,
-    WFLAG_RESCUED       = 0x0008,
-    WFLAG_CAPTIVE       = 0x0010,
-    WFLAG_TALKED        = 0x0020,
+    WFLAG_VISIBLE           = 0x0001,
+    WFLAG_INTERACTABLE      = 0x0002,
+    WFLAG_DEFEATED          = 0x0004,
+    WFLAG_RESCUED           = 0x0008,
+    WFLAG_CAPTIVE           = 0x0010,
+    WFLAG_TALKED            = 0x0020,
+    // Player identity — set once on WOBJ_PLAYER at character select
+    WFLAG_IS_SWORDSMAN      = 0x0040,
+    WFLAG_IS_MAGE           = 0x0080,
+    WFLAG_IS_WYVERN         = 0x0100,
 };
 
 struct World {

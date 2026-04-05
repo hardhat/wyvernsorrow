@@ -30,17 +30,17 @@ flags (`WFLAG_IS_SWORDSMAN`, `WFLAG_IS_MAGE`, `WFLAG_IS_WYVERN`) set at characte
 
 ## Phase 1 — Infrastructure
 
-- [ ] **1.1** Add missing entity IDs to `OBJS` in `script_gen.py`:
+- [x] **1.1** Add missing entity IDs to `OBJS` in `script_gen.py`:
   `WENT_ORC=65, WENT_WEREWOLF=66, WENT_SKELETON=67, WENT_SILVER_KNIGHT=68,
   WENT_DARK_KNIGHT=69, WENT_GHOST=70, WENT_TROLL=71, WENT_GENIE=72,
   WBOSS_FIRE_DRAGON=115, WBOSS_PUMPKIN_HEAD=116, WDEMONLORD=127`
 
-- [ ] **1.2** Add player-identity flags to `FLAGS` in `script_gen.py`:
+- [x] **1.2** Add player-identity flags to `FLAGS` in `script_gen.py`:
   `WFLAG_IS_SWORDSMAN=0x0040, WFLAG_IS_MAGE=0x0080, WFLAG_IS_WYVERN=0x0100`
 
-- [ ] **1.3** Add the same three flags to `enum WORLD_FLAGS` in `src/world.h`
+- [x] **1.3** Add the same three flags to `enum WORLD_FLAGS` in `src/world.h`
 
-- [ ] **1.4** Add scenes for all 14 locations to `script.json` `"scenes"` block
+- [x] **1.4** Add scenes for all 14 locations to `script.json` `"scenes"` block
 
 ---
 

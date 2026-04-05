@@ -1,125 +1,80 @@
 {
     "scripts": {
-        "WNPC_MERCHANT": [
-            [
-                "IF_FLAG_GOTO",
-                "WNPC_MERCHANT",
-                "WFLAG_TALKED",
-                "repeat"
-            ],
-            [
-                "SAY",
-                "Fresh fish for sale!"
-            ],
-            [
-                "SET_FLAG",
-                "WNPC_MERCHANT",
-                "WFLAG_TALKED"
-            ],
-            [
-                "END"
-            ],
-            [
-                "LABEL",
-                "repeat"
-            ],
-            [
-                "SAY",
-                "Come back anytime."
-            ],
-            [
-                "END"
-            ]
-        ],
-        "WITEM_FISH": [
-            [
-                "SAY",
-                "You got a fish."
-            ],
-            [
-                "MOVE",
-                "WITEM_FISH",
-                "WOBJ_PLAYER"
-            ],
-            [
-                "CLEAR_FLAG",
-                "WITEM_FISH",
-                "WFLAG_VISIBLE"
-            ],
-            [
-                "END"
-            ]
-        ],
-        "WBOSS_OGRE": [
-            [
-                "IF_FLAG_GOTO",
-                "WBOSS_OGRE",
-                "WFLAG_DEFEATED",
-                "dead"
-            ],
-            [
-                "SAY",
-                "The ogre roars!\nIt looks hungry for adventurer steak."
-            ],
-            [
-                "SET_FLAG",
-                "WBOSS_OGRE",
-                "WFLAG_DEFEATED"
-            ],
-            [
-                "CLEAR_FLAG",
-                "WBOSS_OGRE",
-                "WFLAG_VISIBLE"
-            ],
-            [
-                "END"
-            ],
-            [
-                "LABEL",
-                "dead"
-            ],
-            [
-                "SAY",
-                "The ogre is defeated.\nHe drops a recipe book for swamp-moss reduction."
-            ],
-            [
-                "END"
-            ]
-        ],
-        "WBOSS_LAND_DRAGON": [
-            [
-                "SAY",
-                "I am a boulder.\nMove along, nothing to see here, definitely not a dragon."
-            ],
-            [
-                "END"
-            ]
-        ],
-        "WBOSS_WIND_DRAGON": [
-            [
-                "SAY",
-                "Wait, did you hear the latest?\nThe Demon Lord is buying pottery wheels from the harbor!"
-            ],
-            [
-                "END"
-            ]
-        ]
+        "WNPC_MERCHANT":      [["END"]],
+        "WITEM_FISH":         [["END"]],
+        "WENT_WEREWOLF":      [["END"]],
+        "WNPC_LITTLE_GIRL":   [["END"]],
+        "WBOSS_OGRE":         [["END"]],
+        "WNPC_OLD_MAN":       [["END"]],
+        "WENT_SILVER_KNIGHT": [["END"]],
+        "WNPC_KING":          [["END"]],
+        "WENT_SKELETON":      [["END"]],
+        "WNPC_CARPENTER":     [["END"]],
+        "WENT_GENIE":         [["END"]],
+        "WNPC_MOTHER":        [["END"]],
+        "WENT_ORC":           [["END"]],
+        "WNPC_FATHER":        [["END"]],
+        "WENT_TROLL":         [["END"]],
+        "WENT_GHOST":         [["END"]],
+        "WENT_DARK_KNIGHT":   [["END"]],
+        "WBOSS_LAND_DRAGON":  [["END"]],
+        "WBOSS_FIRE_DRAGON":  [["END"]],
+        "WBOSS_WIND_DRAGON":  [["END"]],
+        "WBOSS_PUMPKIN_HEAD": [["END"]],
+        "WDEMONLORD":         [["END"]]
     },
     "scenes": {
         "town_map": {
             "WNPC_MERCHANT": "WNPC_MERCHANT"
         },
         "forest_map": {
-            "WITEM_FISH": "WITEM_FISH"
+            "WENT_WEREWOLF":    "WENT_WEREWOLF",
+            "WNPC_LITTLE_GIRL": "WNPC_LITTLE_GIRL"
         },
         "ogre_lair_map": {
-            "WBOSS_OGRE": "WBOSS_OGRE"
+            "WBOSS_OGRE":  "WBOSS_OGRE",
+            "WNPC_OLD_MAN": "WNPC_OLD_MAN"
+        },
+        "castle_map": {
+            "WENT_SILVER_KNIGHT": "WENT_SILVER_KNIGHT",
+            "WNPC_KING":          "WNPC_KING"
+        },
+        "crypt_map": {
+            "WENT_SKELETON":  "WENT_SKELETON",
+            "WNPC_CARPENTER": "WNPC_CARPENTER"
+        },
+        "tower_map": {
+            "WENT_GENIE":  "WENT_GENIE",
+            "WNPC_MOTHER": "WNPC_MOTHER"
+        },
+        "cave_map": {
+            "WENT_ORC":    "WENT_ORC",
+            "WNPC_FATHER": "WNPC_FATHER"
+        },
+        "ruins_map": {
+            "WENT_TROLL": "WENT_TROLL"
+        },
+        "shrine_map": {
+            "WENT_GHOST": "WENT_GHOST"
+        },
+        "harbor_map": {
+            "WENT_DARK_KNIGHT": "WENT_DARK_KNIGHT",
+            "WITEM_FISH":       "WITEM_FISH"
         },
         "mountain_pass_map": {
             "WBOSS_LAND_DRAGON": "WBOSS_LAND_DRAGON"
         },
+        "volcano_map": {
+            "WBOSS_FIRE_DRAGON": "WBOSS_FIRE_DRAGON"
+        },
         "sky_peak_map": {
             "WBOSS_WIND_DRAGON": "WBOSS_WIND_DRAGON"
+        },
+        "swamp_map": {
+            "WBOSS_PUMPKIN_HEAD": "WBOSS_PUMPKIN_HEAD"
+        },
+        "demon_gate_map": {
+            "WDEMONLORD": "WDEMONLORD"
         }
     }
 }

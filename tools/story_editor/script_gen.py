@@ -21,6 +21,10 @@ FLAGS = {
     "WFLAG_RESCUED": 0x0008,
     "WFLAG_CAPTIVE": 0x0010,
     "WFLAG_TALKED": 0x0020,
+    # Player identity flags (set at character select on WOBJ_PLAYER)
+    "WFLAG_IS_SWORDSMAN": 0x0040,
+    "WFLAG_IS_MAGE": 0x0080,
+    "WFLAG_IS_WYVERN": 0x0100,
 }
 
 # Object Mapping (matching world.h)
@@ -36,11 +40,26 @@ OBJS = {
     "WNPC_OLD_MAN": 40,
     "WNPC_KING": 41,
     "WNPC_MERCHANT": 42,
+    # Enemies
     "WENT_GOBLIN": 64,
+    "WENT_ORC": 65,
+    "WENT_WEREWOLF": 66,
+    "WENT_SKELETON": 67,
+    "WENT_SILVER_KNIGHT": 68,
+    "WENT_DARK_KNIGHT": 69,
+    "WENT_GHOST": 70,
+    "WENT_TROLL": 71,
+    "WENT_GENIE": 72,
+    # Items
     "WITEM_FISH": 80,
+    # Bosses
     "WBOSS_OGRE": 112,
     "WBOSS_LAND_DRAGON": 113,
     "WBOSS_WIND_DRAGON": 114,
+    "WBOSS_FIRE_DRAGON": 115,
+    "WBOSS_PUMPKIN_HEAD": 116,
+    # Demon Lord
+    "WDEMONLORD": 127,
 }
 
 def generate_header(json_path, header_path):
