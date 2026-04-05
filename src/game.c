@@ -48,6 +48,33 @@ static const uint8_t room_icon[15] = {
     TILE_WALL_TAPESTRY,       // DEMON_GATE
 };
 
+// Tile solidity bitmask.  Bit (id & 7) of byte (id >> 3) is 1 for solid tiles.
+// Solid tiles: OVERMAP_FOREST(19), OVERMAP_MOUNTAIN(21), OVERMAP_WATER(23),
+//   OVERMAP_ROUGH_WATER(24), BRICK_WALL(25), DECAYED_WALL(26), BRIGHT_WALL(27),
+//   STATUE(28), WALL_TAPESTRY(30), ROOF(31), CHAIR(32), TABLE(33),
+//   PIT(36), WOOD_WALL(39), WOOD_CABINET(40).
+static const uint8_t tile_solid[32] = {
+    0x00, 0x00,  // tiles   0-15: passable (color/fill tiles)
+    0xA8,        // tiles  16-23: FOREST(19) MOUNTAIN(21) WATER(23)
+    0xDF,        // tiles  24-31: ROUGH_WATER BRICK DECAYED BRIGHT STATUE *TAPESTRY ROOF
+    0x93,        // tiles  32-39: CHAIR TABLE *PIT WOOD_WALL
+    0x01,        // tiles  40-47: WOOD_CABINET
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00
+};
+
+// Precomputed passability map, rebuilt on every room enter / resume.
+//   0x00        = solid tile (impassable, no object)
+//   0xFF        = free to walk
+//   anything else = world-object ID blocking that tile (bump = interact)
+static uint8_t passable[MAP_HEIGHT][MAP_WIDTH];
+
+// Cardinal direction offsets for the A-button adjacent scan.
+static const int8_t adj_dx[4] = { 0,  0, -1,  1};
+static const int8_t adj_dy[4] = {-1,  1,  0,  0};
+
 #define FIRST_ROOM WROOM_TOWN
 #define LAST_ROOM WROOM_DEMON_GATE
 
@@ -140,26 +167,31 @@ static void draw_room_name(uint8_t room)
     render_tilemap(0);
 }
 
+static const uint8_t (*get_room_map_ptr(uint8_t room))[MAP_WIDTH]
+{
+    switch(room) {
+        case WROOM_TOWN:          return town_map;
+        case WROOM_FOREST:        return forest_map;
+        case WROOM_OGRE_LAIR:     return ogre_lair_map;
+        case WROOM_CASTLE:        return castle_map;
+        case WROOM_CRYPT:         return crypt_map;
+        case WROOM_TOWER:         return tower_map;
+        case WROOM_CAVE:          return cave_map;
+        case WROOM_RUINS:         return ruins_map;
+        case WROOM_SHRINE:        return shrine_map;
+        case WROOM_HARBOR:        return harbor_map;
+        case WROOM_MOUNTAIN_PASS: return mountain_pass_map;
+        case WROOM_VOLCANO:       return volcano_map;
+        case WROOM_SKY_PEAK:      return sky_peak_map;
+        case WROOM_SWAMP:         return swamp_map;
+        case WROOM_DEMON_GATE:    return demon_gate_map;
+    }
+    return NULL;
+}
+
 static void draw_room_map(uint8_t room)
 {
-    const uint8_t (*map)[MAP_WIDTH] = NULL;
-    switch(room) {
-        case WROOM_TOWN: map = town_map; break;
-        case WROOM_FOREST: map = forest_map; break;
-        case WROOM_OGRE_LAIR: map = ogre_lair_map; break;
-        case WROOM_CASTLE: map = castle_map; break;
-        case WROOM_CRYPT: map = crypt_map; break;
-        case WROOM_TOWER: map = tower_map; break;
-        case WROOM_CAVE: map = cave_map; break;
-        case WROOM_RUINS: map = ruins_map; break;
-        case WROOM_SHRINE: map = shrine_map; break;
-        case WROOM_HARBOR: map = harbor_map; break;
-        case WROOM_MOUNTAIN_PASS: map = mountain_pass_map; break;
-        case WROOM_VOLCANO: map = volcano_map; break;
-        case WROOM_SKY_PEAK: map = sky_peak_map; break;
-        case WROOM_SWAMP: map = swamp_map; break;
-        case WROOM_DEMON_GATE: map = demon_gate_map; break;
-    }
+    const uint8_t (*map)[MAP_WIDTH] = get_room_map_ptr(room);
     if(map) {
         for(uint8_t y = 0; y < MAP_HEIGHT; y++) {
             for(uint8_t x = 0; x < MAP_WIDTH; x++) {
@@ -201,6 +233,46 @@ static uint8_t find_interactable_at(uint8_t room, uint8_t tile_x, uint8_t tile_y
     return WOBJ_NONE;
 }
 
+// Rebuild the passable[] map from the room's tilemap and live object positions.
+// Call whenever the active room or its objects change (room enter, battle end).
+static void rebuild_passable(uint8_t room)
+{
+    const uint8_t (*map)[MAP_WIDTH] = get_room_map_ptr(room);
+    if(!map) return;
+
+    // Step 1: tile solidity.
+    for(uint8_t y = 0; y < MAP_HEIGHT; y++) {
+        for(uint8_t x = 0; x < MAP_WIDTH; x++) {
+            uint8_t t = map[y][x];
+            passable[y][x] = (tile_solid[t >> 3] & (1 << (t & 7))) ? 0x00 : 0xFF;
+        }
+    }
+
+    // Step 2: overlay blocking objects.
+    uint8_t obj = world.child[room];
+    while(obj != WOBJ_NONE) {
+        if(wobj_has_flag(obj, WFLAG_VISIBLE) && !wobj_has_flag(obj, WFLAG_DEFEATED)
+           && world.type[obj] != WTYPE_ROOM) {
+            uint8_t ox = world.x[obj];
+            uint8_t oy = world.y[obj];
+            if(world.sprite[obj] == TILE_COLOR_DEMONLORD) {
+                // 4x4 Demon Lord
+                for(uint8_t r = 0; r < 4; r++)
+                    for(uint8_t c = 0; c < 4; c++)
+                        passable[oy + r][ox + c] = obj;
+            } else if(world.type[obj] == WTYPE_BOSS) {
+                // 2x2 bosses
+                for(uint8_t r = 0; r < 2; r++)
+                    for(uint8_t c = 0; c < 2; c++)
+                        passable[oy + r][ox + c] = obj;
+            } else {
+                passable[oy][ox] = obj;
+            }
+        }
+        obj = world.sibling[obj];
+    }
+}
+
 // Turn Management Constants
 #define MAX_ACTIONS_PER_TURN 3
 #define DISTRICTS_FOR_WIN 35  // 70% of 49 districts
@@ -210,6 +282,7 @@ void resume_game(void)
     set_font(FONT_FLAMBOYANT);
     game_clear_dialog();
     draw_room_map(current_room);
+    rebuild_passable(current_room);
     draw_room_name(current_room);
     game.choice_target = WOBJ_NONE;
 }
@@ -242,6 +315,37 @@ void init_game(void)
     }
 }
 
+// Trigger the appropriate response for bumping into or pressing A on an object.
+static void interact_with_object(uint8_t obj)
+{
+    if(world.type[obj] == WTYPE_ENEMY || world.type[obj] == WTYPE_BOSS || obj == WDEMONLORD) {
+        game.choice_target = obj;
+        set_state(GAME_STATE_CHOICE);
+    } else if(wobj_has_flag(obj, WFLAG_INTERACTABLE)) {
+        if(!story_interact(obj, current_room, (uint8_t)game.player.type))
+            game_clear_dialog();
+    }
+}
+
+// Try to move the player to (nx, ny).  If the destination holds an object,
+// bump-interact instead of moving.  If it's a solid tile, do nothing.
+static void try_move_game(int nx, int ny)
+{
+    if(nx < 0 || nx >= MAP_WIDTH || ny < 0) return;
+    if(ny >= MAP_HEIGHT) {
+        set_state(GAME_STATE_WORLDMAP);
+        return;
+    }
+    uint8_t cell = passable[ny][nx];
+    if(cell == 0xFF) {
+        cursor_x = nx;
+        cursor_y = ny;
+    } else if(cell != 0x00) {
+        interact_with_object(cell);
+    }
+    // cell == 0x00: solid tile, movement silently blocked.
+}
+
 void input_game(uint8_t key, bool down)
 {
     held[key] = down;
@@ -251,47 +355,36 @@ void input_game(uint8_t key, bool down)
             set_state(GAME_STATE_GAMEOVER);
             break;
         case INPUT_UP:
-            if(cursor_y > 0) cursor_y--;
+            try_move_game(cursor_x, cursor_y - 1);
             break;
         case INPUT_DOWN:
-            if(cursor_y >= MAP_HEIGHT - 1) {
-                // Walk off the bottom edge: return to world map
-                set_state(GAME_STATE_WORLDMAP);
-            } else {
-                cursor_y++;
-            }
+            try_move_game(cursor_x, cursor_y + 1);
             break;
         case INPUT_LEFT:
-            if(cursor_x > 0) cursor_x--;
+            try_move_game(cursor_x - 1, cursor_y);
             break;
         case INPUT_RIGHT:
-            if(cursor_x < MAP_WIDTH - 1) cursor_x++;
+            try_move_game(cursor_x + 1, cursor_y);
             break;
         case INPUT_SELECT:
-            // Allow player to manually end their turn
             debug_logf("Player manually ended turn");
             end_turn();
             break;
         case INPUT_A:
         {
-            // Interact with the object under the cursor.
-            uint8_t tile_x = (uint8_t)(cursor_x);
-            uint8_t tile_y = (uint8_t)(cursor_y);
-            uint8_t target = find_interactable_at(current_room, tile_x, tile_y);
-            if(target != WOBJ_NONE) {
-                // If it's an enemy, boss, or the demon lord, show the choice menu.
-                if (world.type[target] == WTYPE_ENEMY || world.type[target] == WTYPE_BOSS || target == WDEMONLORD) {
-                    game.choice_target = target;
-                    set_state(GAME_STATE_CHOICE);
-                } else {
-                    if(!story_interact(target, current_room, (uint8_t)game.player.type)) {
-                        // Script ended or had nothing to say; clear the dialog.
-                        game_clear_dialog();
-                    }
+            // Scan the four adjacent tiles for a reachable object and interact.
+            uint8_t target = WOBJ_NONE;
+            for(uint8_t d = 0; d < 4 && target == WOBJ_NONE; d++) {
+                int nx = cursor_x + adj_dx[d];
+                int ny = cursor_y + adj_dy[d];
+                if(nx >= 0 && nx < MAP_WIDTH && ny >= 0 && ny < MAP_HEIGHT) {
+                    uint8_t cell = passable[ny][nx];
+                    if(cell != 0x00 && cell != 0xFF)
+                        target = cell;
                 }
-            } else {
-                game_show_dialog("Nothing here.");
             }
+            if(target != WOBJ_NONE)
+                interact_with_object(target);
             debug_logf("Interact at (%d,%d)", cursor_x, cursor_y);
             break;
         }
