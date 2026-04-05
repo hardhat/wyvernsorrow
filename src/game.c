@@ -20,6 +20,34 @@ static uint8_t choice_index = 0;
 static uint8_t last_choice_index;
 static bool choice_has_battle = false;
 
+// World-map player tile position (separate from location-map cursor).
+static uint8_t worldmap_x = 8;
+static uint8_t worldmap_y = 13;
+
+// World-map icon positions for each room (indexed by WROOM_* ID 0-14).
+// Order: TOWN, FOREST, OGRE_LAIR, CASTLE, CRYPT, TOWER, CAVE, RUINS,
+//        SHRINE, HARBOR, MOUNTAIN_PASS, VOLCANO, SKY_PEAK, SWAMP, DEMON_GATE
+static const uint8_t room_wm_x[15] = { 8,  4,  2,  5,  1,  7, 10, 13, 11, 16, 12, 17, 14,  2,  9};
+static const uint8_t room_wm_y[15] = {13, 10,  7,  5,  3,  3,  8,  9, 12,  7,  4,  4,  2, 12,  1};
+// Icon tile displayed on the world map when a room is unlocked.
+static const uint8_t room_icon[15] = {
+    TILE_OVERMAP_CITY,        // TOWN
+    TILE_OVERMAP_FOREST,      // FOREST
+    TILE_DECAYED_WALL,        // OGRE_LAIR
+    TILE_BRICK_WALL,          // CASTLE
+    TILE_STATUE,              // CRYPT
+    TILE_BRIGHT_WALL,         // TOWER
+    TILE_WALL_TAPESTRY,       // CAVE
+    TILE_DECAYED_WALL,        // RUINS
+    TILE_WALL_OPENING,        // SHRINE
+    TILE_OVERMAP_WATER,       // HARBOR
+    TILE_OVERMAP_FOOTHILLS,   // MOUNTAIN_PASS
+    TILE_FIREBALL,            // VOLCANO
+    TILE_OVERMAP_MOUNTAIN,    // SKY_PEAK
+    TILE_OVERMAP_ROUGH_WATER, // SWAMP
+    TILE_WALL_TAPESTRY,       // DEMON_GATE
+};
+
 #define FIRST_ROOM WROOM_TOWN
 #define LAST_ROOM WROOM_DEMON_GATE
 
@@ -195,8 +223,6 @@ void init_game(void)
     world_init();
     world_setup_demo();
     current_room = WROOM_TOWN;
-    draw_room_map(current_room);
-    draw_room_name(current_room);
     game.choice_target = WOBJ_NONE;
 
     // Set player sprite based on menu choice
@@ -224,27 +250,22 @@ void input_game(uint8_t key, bool down)
         case INPUT_START:
             set_state(GAME_STATE_GAMEOVER);
             break;
-        case INPUT_X:
-            change_room(1);
-            break;
-        case INPUT_Y:
-            change_room(-1);
-            break;
         case INPUT_UP:
-            cursor_y--;
-            if(cursor_y<0) cursor_y=14;
+            if(cursor_y > 0) cursor_y--;
             break;
         case INPUT_DOWN:
-            cursor_y++;
-            if(cursor_y>14) cursor_y=0;
+            if(cursor_y >= MAP_HEIGHT - 1) {
+                // Walk off the bottom edge: return to world map
+                set_state(GAME_STATE_WORLDMAP);
+            } else {
+                cursor_y++;
+            }
             break;
         case INPUT_LEFT:
-            cursor_x--;
-            if(cursor_x<0) cursor_x=19;
+            if(cursor_x > 0) cursor_x--;
             break;
         case INPUT_RIGHT:
-            cursor_x++;
-            if(cursor_x>19) cursor_x=0;
+            if(cursor_x < MAP_WIDTH - 1) cursor_x++;
             break;
         case INPUT_SELECT:
             // Allow player to manually end their turn
@@ -310,14 +331,124 @@ void draw_game(void)
 
     world_render_room_sprites(current_room);
 
-    // Draw the cursor as 4 sprites (1x1 tiles).
-    add_sprite(cursor_x*16, cursor_y*16, TILE_CURSOR);
-    add_sprite(cursor_x*16+16, cursor_y*16, TILE_CURSOR+1);
-    add_sprite(cursor_x*16, cursor_y*16+16, TILE_CURSOR+2);
-    add_sprite(cursor_x*16+16, cursor_y*16+16, TILE_CURSOR+3);
+    // Draw the player as a single tile sprite at the cursor position.
+    add_sprite((uint16_t)cursor_x * 16, (uint8_t)(cursor_y * 16), world.sprite[WOBJ_PLAYER]);
     render_sprites();
 }
 
+// -------------------------------------------------------------------------
+// World Map state
+// -------------------------------------------------------------------------
+
+static void draw_worldmap_tiles(void)
+{
+    // Draw background terrain.
+    for(uint8_t y = 0; y < MAP_HEIGHT; y++) {
+        for(uint8_t x = 0; x < MAP_WIDTH; x++) {
+            draw_tilemap(x, y, world_map[y][x]);
+        }
+    }
+    // Overlay unlocked location icons.
+    for(uint8_t r = WROOM_TOWN; r <= WROOM_DEMON_GATE; r++) {
+        if(wobj_has_flag(r, WFLAG_UNLOCKED)) {
+            draw_tilemap(room_wm_x[r], room_wm_y[r], room_icon[r]);
+        }
+    }
+    render_tilemap(0);
+}
+
+// Return the room whose icon tile occupies (x,y) on the world map, or WOBJ_NONE.
+static uint8_t worldmap_room_at(uint8_t x, uint8_t y)
+{
+    for(uint8_t r = WROOM_TOWN; r <= WROOM_DEMON_GATE; r++) {
+        if(wobj_has_flag(r, WFLAG_UNLOCKED) && room_wm_x[r] == x && room_wm_y[r] == y) {
+            return r;
+        }
+    }
+    return WOBJ_NONE;
+}
+
+void init_worldmap(void)
+{
+    // Place the player at the icon of the last-visited (or starting) room.
+    if (current_room <= WROOM_DEMON_GATE) {
+        worldmap_x = room_wm_x[current_room];
+        worldmap_y = room_wm_y[current_room];
+    } else {
+        worldmap_x = room_wm_x[WROOM_TOWN];
+        worldmap_y = room_wm_y[WROOM_TOWN];
+    }
+    set_font(FONT_FLAMBOYANT);
+    draw_worldmap_tiles();
+    draw_room_name(current_room);
+}
+
+void input_worldmap(uint8_t key, bool down)
+{
+    if(!down) return;
+    switch(key) {
+        case INPUT_START:
+            set_state(GAME_STATE_GAMEOVER);
+            break;
+        case INPUT_UP:
+            if(worldmap_y > 0) worldmap_y--;
+            break;
+        case INPUT_DOWN:
+            if(worldmap_y < MAP_HEIGHT - 1) worldmap_y++;
+            break;
+        case INPUT_LEFT:
+            if(worldmap_x > 0) worldmap_x--;
+            break;
+        case INPUT_RIGHT:
+            if(worldmap_x < MAP_WIDTH - 1) worldmap_x++;
+            break;
+        case INPUT_A:
+        {
+            // Enter a revealed location under the player.
+            uint8_t r = worldmap_room_at(worldmap_x, worldmap_y);
+            if(r != WOBJ_NONE) {
+                current_room = r;
+                // Enter from the bottom of the location map.
+                cursor_x = 9;
+                cursor_y = MAP_HEIGHT - 1;
+                set_state(GAME_STATE_GAME);
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    // Update room-name label whenever the player moves.
+    {
+        uint8_t r = worldmap_room_at(worldmap_x, worldmap_y);
+        if(r != WOBJ_NONE)
+            draw_room_name(r);
+        else {
+            // Clear the name row tiles to grass.
+            fill_tilemap(TILE_OVERMAP_GRASS, 0, 0, MAP_WIDTH, 1);
+            render_tilemap(0);
+            // Redraw any icons that may be on row 0.
+            for(uint8_t ri = WROOM_TOWN; ri <= WROOM_DEMON_GATE; ri++) {
+                if(wobj_has_flag(ri, WFLAG_UNLOCKED) && room_wm_y[ri] == 0) {
+                    draw_tilemap(room_wm_x[ri], 0, room_icon[ri]);
+                }
+            }
+            render_tilemap(0);
+        }
+    }
+}
+
+void update_worldmap(void) {}
+
+void draw_worldmap(void)
+{
+    reset_sprite();
+    add_sprite((uint16_t)worldmap_x * 16, (uint8_t)(worldmap_y * 16),
+               world.sprite[WOBJ_PLAYER]);
+    render_sprites();
+}
+
+// -------------------------------------------------------------------------
 void init_choice(void)
 {
     choice_index = 0;

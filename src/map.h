@@ -3,6 +3,7 @@
 #define MAP_WIDTH 20
 #define MAP_HEIGHT 15
 
+extern const uint8_t world_map[MAP_HEIGHT][MAP_WIDTH];
 extern const uint8_t town_map[MAP_HEIGHT][MAP_WIDTH];
 extern const uint8_t forest_map[MAP_HEIGHT][MAP_WIDTH];
 extern const uint8_t ogre_lair_map[MAP_HEIGHT][MAP_WIDTH];

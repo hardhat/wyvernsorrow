@@ -79,7 +79,7 @@ void input_menu(uint8_t key, bool down)
         if(choice==0) game.player.type=PLAYER_TYPE_SWORDSMAN;
         else if(choice==1) game.player.type=PLAYER_TYPE_MAGE;
         else game.player.type=PLAYER_TYPE_WYVERN;
-        set_state(GAME_STATE_GAME);
+        set_state(GAME_STATE_WORLDMAP);
     }
     if(down && key == INPUT_UP)
     {

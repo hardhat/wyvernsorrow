@@ -82,7 +82,10 @@ void wobj_set_flag(uint8_t obj, uint16_t flag, bool on)
 void world_setup_demo(void)
 {
     // The first 32 objects are rooms (set in world_init).
-    
+    // Town and Forest are always unlocked; all other rooms revealed via unlock chain.
+    wobj_set_flag(WROOM_TOWN,   WFLAG_UNLOCKED, true);
+    wobj_set_flag(WROOM_FOREST, WFLAG_UNLOCKED, true);
+
     // Player object exists for story/state purposes (inventory, flags, etc.)
     wobj_clear(WOBJ_PLAYER);
     world.type[WOBJ_PLAYER] = WTYPE_ACTOR;
@@ -126,5 +129,47 @@ void world_render_room_sprites(uint8_t room)
             }
         }
         obj = world.sibling[obj];
+    }
+}
+
+// Character progression tracks: order each player type visits rooms.
+// Defeating the boss/enemy in track[i] reveals track[i+1] on the world map.
+static const uint8_t track_swordsman[14] = {
+    WROOM_TOWN, WROOM_FOREST, WROOM_OGRE_LAIR, WROOM_CASTLE,
+    WROOM_MOUNTAIN_PASS, WROOM_CAVE, WROOM_HARBOR, WROOM_RUINS,
+    WROOM_SWAMP, WROOM_SHRINE, WROOM_TOWER, WROOM_VOLCANO,
+    WROOM_SKY_PEAK, WROOM_DEMON_GATE
+};
+static const uint8_t track_mage[14] = {
+    WROOM_TOWN, WROOM_FOREST, WROOM_CRYPT, WROOM_TOWER,
+    WROOM_SHRINE, WROOM_RUINS, WROOM_CAVE, WROOM_HARBOR,
+    WROOM_SWAMP, WROOM_CASTLE, WROOM_MOUNTAIN_PASS, WROOM_SKY_PEAK,
+    WROOM_VOLCANO, WROOM_DEMON_GATE
+};
+static const uint8_t track_wyvern[14] = {
+    WROOM_TOWN, WROOM_FOREST, WROOM_SKY_PEAK, WROOM_VOLCANO,
+    WROOM_MOUNTAIN_PASS, WROOM_HARBOR, WROOM_CAVE, WROOM_SWAMP,
+    WROOM_RUINS, WROOM_SHRINE, WROOM_TOWER, WROOM_CRYPT,
+    WROOM_CASTLE, WROOM_DEMON_GATE
+};
+
+void world_unlock_next(uint8_t defeated_enemy_obj, uint8_t player_type)
+{
+    uint8_t defeated_room = world.parent[defeated_enemy_obj];
+    if (defeated_room == WOBJ_NONE) return;
+
+    const uint8_t *track;
+    switch (player_type) {
+        case 0:  track = track_swordsman; break;
+        case 1:  track = track_mage;      break;
+        case 2:  track = track_wyvern;    break;
+        default: return;
+    }
+
+    for (uint8_t i = 0; i < 13; i++) {
+        if (track[i] == defeated_room) {
+            wobj_set_flag(track[i + 1], WFLAG_UNLOCKED, true);
+            return;
+        }
     }
 }

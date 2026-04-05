@@ -33,6 +33,11 @@ void end_turn(void);
 bool check_win_condition(void);
 void game_show_dialog(const char* text);
 
+void init_worldmap(void);
+void input_worldmap(uint8_t key, bool down);
+void update_worldmap(void);
+void draw_worldmap(void);
+
 void init_gameover(void);
 void input_gameover(uint8_t key, bool down);
 void update_gameover(void);

@@ -72,12 +72,17 @@ void set_state(enum GAME_STATE state)
         case GAME_STATE_MENU:
             init_menu();
             break;
-        case GAME_STATE_GAME:
-            // Only do a full init when coming from the menu; otherwise just restore the room.
-            if(game_state == GAME_STATE_MENU)
+        case GAME_STATE_WORLDMAP:
+            if(game_state == GAME_STATE_MENU) {
+                // Full world init on the first entry from the menu.
                 init_game();
-            else
-                resume_game();
+            }
+            init_worldmap();
+            break;
+        case GAME_STATE_GAME:
+            // Full init only when the menu redirected through WORLDMAP first;
+            // coming from WORLDMAP means current_room + cursor are already set.
+            resume_game();
             break;
         case GAME_STATE_CHOICE:
             init_choice();
@@ -494,6 +499,9 @@ void process_input(void)
                     case GAME_STATE_MENU:
                         input_menu(input, pressed);
                         break;
+                    case GAME_STATE_WORLDMAP:
+                        input_worldmap(input, pressed);
+                        break;
                     case GAME_STATE_GAME:
                         input_game(input, pressed);
                         break;
@@ -530,6 +538,9 @@ int main(void)
             case GAME_STATE_MENU:
                 update_menu();
                 break;
+            case GAME_STATE_WORLDMAP:
+                update_worldmap();
+                break;
             case GAME_STATE_GAME:
                 update_game();
                 break;
@@ -547,6 +558,9 @@ int main(void)
         switch(game_state) {
             case GAME_STATE_MENU:
                 draw_menu();
+                break;
+            case GAME_STATE_WORLDMAP:
+                draw_worldmap();
                 break;
             case GAME_STATE_GAME:
                 draw_game();

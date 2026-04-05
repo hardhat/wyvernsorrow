@@ -332,6 +332,7 @@ void update_battle(void)
 
     if (e_combatant.hp == 0) {
         wobj_set_flag(e_combatant.objectId, WFLAG_DEFEATED, true);
+        world_unlock_next(e_combatant.objectId, game.player.type);
         set_state(GAME_STATE_GAME);
         game_show_dialog("Victory!");
         return;

@@ -95,6 +95,8 @@ enum WORLD_FLAGS {
     WFLAG_IS_SWORDSMAN      = 0x0040,
     WFLAG_IS_MAGE           = 0x0080,
     WFLAG_IS_WYVERN         = 0x0100,
+    // Room visibility on world map — set when the room is unlocked for travel
+    WFLAG_UNLOCKED          = 0x0200,
 };
 
 struct World {
@@ -117,6 +119,11 @@ struct World {
 extern struct World world;
 
 void world_init(void);
+
+/// @brief Unlock the next room in the player's track after defeating an enemy.
+/// @param defeated_enemy_obj the object ID of the defeated enemy or boss.
+/// @param player_type PLAYER_TYPE_SWORDSMAN, PLAYER_TYPE_MAGE, or PLAYER_TYPE_WYVERN.
+void world_unlock_next(uint8_t defeated_enemy_obj, uint8_t player_type);
 
 // Configure a small demo setup (town with a merchant and a fish).
 // This is a pattern to expand into full story scripting.
