@@ -168,16 +168,15 @@ void game_show_dialog(const char *text)
         dialog_total = dialog_nl + len2;
     }
 
-    // Fill text_tiles with the background color (no text yet) and wire up
-    // the tilemap row so the hardware references these tile slots.
+    // Fill text_tiles with the background color (no text yet).
     clear_text_tiles(COL_DARK_BLUE, 20);
     set_font(FONT_FLAMBOYANT);
-    for(uint8_t i = 0; i < 20; i++)
-        draw_tilemap((uint16_t)(2 + i), 14, DIALOG_TILE + i);
 
-    // Push the first blank tile immediately so the box begins appearing.
+    // Wire and push only tile 0 so the box starts appearing without
+    // referencing uninitialized tileset slots.
+    draw_tilemap(2, 14, DIALOG_TILE);
     render_text_offset(DIALOG_TILE, 0, 1);
-    render_tilemap(0);
+    render_tilemap_xy0(2, 14);
 
     dialog_tile_idx = 1;
     dialog_char_idx = 0;
@@ -489,6 +488,8 @@ void update_game(void)
         // Phase 1: grow the solid background box one tile per frame.
         if(dialog_tile_idx < 20) {
             render_text_offset(DIALOG_TILE, dialog_tile_idx, 1);
+            draw_tilemap((uint16_t)(2 + dialog_tile_idx), 14, DIALOG_TILE + dialog_tile_idx);
+            render_tilemap_xy0(2 + dialog_tile_idx, 14);
             dialog_tile_idx++;
         } else {
             dialog_phase = DIALOG_PHASE_TEXT;
