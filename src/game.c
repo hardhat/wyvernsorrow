@@ -79,6 +79,19 @@ static const int8_t adj_dy[4] = {-1,  1,  0,  0};
 #define LAST_ROOM WROOM_DEMON_GATE
 
 #define DIALOG_TILE 0xB0
+
+// Typewriter dialog state.
+#define DIALOG_PHASE_IDLE  0  // nothing animating
+#define DIALOG_PHASE_BOX   1  // uploading background tiles left-to-right
+#define DIALOG_PHASE_TEXT  2  // dripping characters into uploaded tiles
+
+static uint8_t dialog_phase    = DIALOG_PHASE_IDLE;
+static uint8_t dialog_tile_idx;   // next tile (0-19) to upload in BOX phase
+static uint8_t dialog_char_idx;   // next character index in TEXT phase
+static uint8_t dialog_total;      // total printable chars across both lines
+static uint8_t dialog_nl;         // length of line 1 (index of '\n', or full length)
+static bool    dialog_newline;    // true when text contains a '\n' split
+static char    dialog_buf[82];    // raw stored text (up to 2x40 + '\n' + NUL)
 #define ROOM_TILE 0xA0
 #define ROOM_TILE_COUNT 8
 #define ROOM_TILE_X 6
@@ -115,10 +128,60 @@ static void draw_dialog_text(const char *text)
     render_tilemap(0);
 }
 
+// Instantly complete any in-progress typewriter and leave the dialog visible.
+static void dialog_flush(void)
+{
+    if(dialog_phase == DIALOG_PHASE_IDLE) return;
+    draw_dialog_text(dialog_buf);
+    dialog_phase = DIALOG_PHASE_IDLE;
+}
+
 // Called by the story VM.
 void game_show_dialog(const char *text)
 {
-    draw_dialog_text(text);
+    // If a previous typewriter is still running, finish it first.
+    if(dialog_phase != DIALOG_PHASE_IDLE)
+        dialog_flush();
+
+    // Copy text and locate the newline split.
+    uint8_t len = 0;
+    while(text[len] != '\0' && len < 81) len++;
+    for(uint8_t i = 0; i <= len; i++) dialog_buf[i] = text[i];
+
+    dialog_newline = false;
+    dialog_nl = len;
+    for(uint8_t i = 0; i < len; i++) {
+        if(dialog_buf[i] == '\n') {
+            dialog_newline = true;
+            dialog_nl = i;
+            break;
+        }
+    }
+
+    // Count printable characters (excluding the '\n' itself).
+    if(!dialog_newline) {
+        dialog_total = len;
+    } else {
+        uint8_t len2 = 0;
+        const char *p = dialog_buf + dialog_nl + 1;
+        while(*p != '\0' && len2 < 40) { p++; len2++; }
+        dialog_total = dialog_nl + len2;
+    }
+
+    // Fill text_tiles with the background color (no text yet) and wire up
+    // the tilemap row so the hardware references these tile slots.
+    clear_text_tiles(COL_DARK_BLUE, 20);
+    set_font(FONT_FLAMBOYANT);
+    for(uint8_t i = 0; i < 20; i++)
+        draw_tilemap((uint16_t)(2 + i), 14, DIALOG_TILE + i);
+
+    // Push the first blank tile immediately so the box begins appearing.
+    render_text_offset(DIALOG_TILE, 0, 1);
+    render_tilemap(0);
+
+    dialog_tile_idx = 1;
+    dialog_char_idx = 0;
+    dialog_phase    = DIALOG_PHASE_BOX;
 }
 
 static void game_clear_dialog(void)
@@ -355,16 +418,20 @@ void input_game(uint8_t key, bool down)
             set_state(GAME_STATE_GAMEOVER);
             break;
         case INPUT_UP:
-            try_move_game(cursor_x, cursor_y - 1);
+            if(dialog_phase == DIALOG_PHASE_IDLE)
+                try_move_game(cursor_x, cursor_y - 1);
             break;
         case INPUT_DOWN:
-            try_move_game(cursor_x, cursor_y + 1);
+            if(dialog_phase == DIALOG_PHASE_IDLE)
+                try_move_game(cursor_x, cursor_y + 1);
             break;
         case INPUT_LEFT:
-            try_move_game(cursor_x - 1, cursor_y);
+            if(dialog_phase == DIALOG_PHASE_IDLE)
+                try_move_game(cursor_x - 1, cursor_y);
             break;
         case INPUT_RIGHT:
-            try_move_game(cursor_x + 1, cursor_y);
+            if(dialog_phase == DIALOG_PHASE_IDLE)
+                try_move_game(cursor_x + 1, cursor_y);
             break;
         case INPUT_SELECT:
             debug_logf("Player manually ended turn");
@@ -372,20 +439,25 @@ void input_game(uint8_t key, bool down)
             break;
         case INPUT_A:
         {
-            // Scan the four adjacent tiles for a reachable object and interact.
-            uint8_t target = WOBJ_NONE;
-            for(uint8_t d = 0; d < 4 && target == WOBJ_NONE; d++) {
-                int nx = cursor_x + adj_dx[d];
-                int ny = cursor_y + adj_dy[d];
-                if(nx >= 0 && nx < MAP_WIDTH && ny >= 0 && ny < MAP_HEIGHT) {
-                    uint8_t cell = passable[ny][nx];
-                    if(cell != 0x00 && cell != 0xFF)
-                        target = cell;
+            if(dialog_phase != DIALOG_PHASE_IDLE) {
+                // Skip / complete the typewriter instantly.
+                dialog_flush();
+            } else {
+                // Scan the four adjacent tiles for a reachable object and interact.
+                uint8_t target = WOBJ_NONE;
+                for(uint8_t d = 0; d < 4 && target == WOBJ_NONE; d++) {
+                    int nx = cursor_x + adj_dx[d];
+                    int ny = cursor_y + adj_dy[d];
+                    if(nx >= 0 && nx < MAP_WIDTH && ny >= 0 && ny < MAP_HEIGHT) {
+                        uint8_t cell = passable[ny][nx];
+                        if(cell != 0x00 && cell != 0xFF)
+                            target = cell;
+                    }
                 }
+                if(target != WOBJ_NONE)
+                    interact_with_object(target);
+                debug_logf("Interact at (%d,%d)", cursor_x, cursor_y);
             }
-            if(target != WOBJ_NONE)
-                interact_with_object(target);
-            debug_logf("Interact at (%d,%d)", cursor_x, cursor_y);
             break;
         }
         default:
@@ -413,8 +485,42 @@ void end_turn(void)
 
 void update_game(void)
 {
-    // TODO: implement game update logic
-    
+    if(dialog_phase == DIALOG_PHASE_BOX) {
+        // Phase 1: grow the solid background box one tile per frame.
+        if(dialog_tile_idx < 20) {
+            render_text_offset(DIALOG_TILE, dialog_tile_idx, 1);
+            dialog_tile_idx++;
+        } else {
+            dialog_phase = DIALOG_PHASE_TEXT;
+        }
+    } else if(dialog_phase == DIALOG_PHASE_TEXT) {
+        // Phase 2: reveal one character per frame, left-to-right.
+        if(dialog_char_idx < dialog_total) {
+            uint8_t  ci = dialog_char_idx;
+            uint16_t px;
+            uint8_t  py;
+            char c;
+            if(!dialog_newline || ci < dialog_nl) {
+                c  = dialog_buf[ci];
+                px = 4 + (uint16_t)ci * 8;
+                py = dialog_newline ? 0 : 4;
+            } else {
+                uint8_t ci2 = ci - dialog_nl;
+                c  = dialog_buf[dialog_nl + 1 + ci2];
+                px = 4 + (uint16_t)ci2 * 8;
+                py = 8;
+            }
+            char tmp[2] = {c, '\0'};
+            draw_text_opaque(px, py, tmp, COL_WHITE, COL_BLUE);
+            // Upload only the 1-2 tiles this character's pixels touch.
+            uint8_t first_tile = (uint8_t)(px >> 4);
+            uint8_t last_tile  = (uint8_t)((px + 7) >> 4);
+            render_text_offset(DIALOG_TILE, first_tile, last_tile - first_tile + 1);
+            dialog_char_idx++;
+        } else {
+            dialog_phase = DIALOG_PHASE_IDLE;
+        }
+    }
 }
 
 void draw_game(void)

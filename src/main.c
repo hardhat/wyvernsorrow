@@ -345,33 +345,35 @@ void draw_text_pixel_offset(uint16_t offset, uint8_t color)
 
 void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
 {
-#if 1
-    const uint8_t *ptr = font+((c-32)<<3);
-    for(uint8_t i=0;i<8;i++)
-    {
-        uint8_t mask = 1<<(7-i);
-        for(uint8_t j=0;j<8;j++)
+    if(x&15>8&&y&15>8) {
+        // Straddling tiles, draw pixel by pixel
+        const uint8_t *ptr = font+((c-32)<<3);
+        for(uint8_t i=0;i<8;i++)
         {
-            if(ptr[j] & mask)
-                draw_text_pixel(x+i, y+j, color);
+            uint8_t mask = 1<<(7-i);
+            for(uint8_t j=0;j<8;j++)
+            {
+                if(ptr[j] & mask)
+                    draw_text_pixel(x+i, y+j, color);
+            }
+        }
+    } else {
+        // Save some computation on the common case of aligned text by precomputing the offset and only checking tile bounds once.
+        uint16_t offset = ((x>>4)<<8)+(y<<4)+(x&0x0F);
+        const uint8_t *ptr = font+((c-32)<<3);
+        uint8_t mask=0x80;
+        for(uint8_t i=0;i<8;i++)
+        {
+            uint16_t offset2 = offset+i;
+            for(uint8_t j=0;j<8;j++)
+            {
+                offset2 += 16;
+                if(ptr[j] & mask)
+                    draw_text_pixel_offset(offset2, color);
+            }
+            mask >>= 1;
         }
     }
-#else
-    uint16_t offset = ((x>>4)<<8)+(y<<4)+(x&0x0F);
-    uint8_t *ptr = font+((c-32)<<3);
-    uint8_t mask=0x80;
-    for(uint8_t i=0;i<8;i++)
-    {
-        uint16_t offset2 = offset+i;
-        for(uint8_t j=0;j<8;j++)
-        {
-            offset2 += 16;
-            if(ptr[j] & mask)
-                draw_text_pixel_offset(offset2, color);
-        }
-        mask >>= 1;
-    }
-#endif
 }
 
 void draw_text(uint16_t x, uint8_t y, const char *text, uint8_t color)
@@ -411,6 +413,14 @@ void render_text(uint8_t tile, uint8_t tile_count)
     gfx_tileset_load(&ctx, text_tiles, tile_count*256, &options);
 }
 
+void render_text_offset(uint8_t base_tile, uint8_t tile_offset, uint8_t count)
+{
+    uint16_t from = ((uint16_t)base_tile + tile_offset) * 256;
+    gfx_tileset_options options = {0, from, 0, 0};
+    gfx_tileset_load(&ctx, text_tiles + (uint16_t)tile_offset * 256,
+                     (uint16_t)count * 256, &options);
+}
+
 void draw_tilemap(uint16_t x, uint8_t y, uint8_t tile)
 {
     tilemap0[y*tilemap_width+x] = tile;
@@ -445,6 +455,16 @@ void render_tilemap(uint8_t layer)
     {
         gfx_tilemap_load(&ctx, tilemap0+y*tilemap_width, tilemap_width, layer, 0, y);
     }
+}
+
+void render_tilemap_xy0(uint8_t x, uint8_t y)
+{
+    gfx_tilemap_load(&ctx, tilemap0+y*tilemap_width+x, 1, 0, x, y);
+}
+
+void render_tilemap_xy1(uint8_t x, uint8_t y)
+{
+    gfx_tilemap_load(&ctx, tilemap0+y*tilemap_width+x, 1, 1, x, y);
 }
 
 void reset_sprite(void)

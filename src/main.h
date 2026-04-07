@@ -176,6 +176,14 @@ void fill_tilemap(uint8_t tile,uint16_t x, uint8_t y, uint8_t w, uint8_t h);
 /// @param layer layer to render, 0 for the first layer, 1 for the second layer, etc.
 /// @note The tilemap is rendered in a single pass, so it should be called after
 void render_tilemap(uint8_t layer);
+/// @brief Renders a single tile of the tilemap at the specified position for layer 0.
+/// @param x 
+/// @param y 
+void render_tilemap_xy0(uint8_t x, uint8_t y);
+/// @brief Renders a single tile of the tilemap at the specified position for layer 1.
+/// @param x
+/// @param y
+void render_tilemap_xy1(uint8_t x, uint8_t y);
 /// @brief Clear the off screen sprite buffer to be rendered later.  Fully zeros the buffer, and sets the current count to 0.
 void reset_sprite(void);
 /// @brief Adds a sprite to the sprite buffer to be rendered later.
@@ -218,6 +226,11 @@ void draw_text_opaque(uint16_t x, uint8_t y, const char *text, uint8_t fg, uint8
 /// @param tile tile id to start rendering from, which must be in the tileset.
 /// @param tile_count number of tiles to render, which must be less than or equal to 16.
 void render_text(uint8_t tile, uint8_t tile_count);
+/// @brief Renders a subset of the text tiles to the screen.
+/// @param base_tile absolute tileset slot of the first tile in the strip (e.g. DIALOG_TILE).
+/// @param tile_offset 0-based index within the strip of the first tile to upload.
+/// @param count number of consecutive tiles to upload.
+void render_text_offset(uint8_t base_tile, uint8_t tile_offset, uint8_t count);
 
 /// @brief Log to the serial port.
 /// @param message the message to log.
