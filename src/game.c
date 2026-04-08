@@ -104,10 +104,10 @@ static void draw_dialog_text(const char *text)
         if(*p == '\n') { nl = p; break; }
     }
 
-    clear_text_tiles(COL_DARK_BLUE, 20);
+    clear_text_tiles(83, 20);
     set_font(FONT_FLAMBOYANT);
     if(nl == NULL) {
-        draw_text_opaque(4, 4, text, COL_WHITE, COL_BLUE);
+        draw_text(4, 4, text, COL_BLACK);
     } else {
         // Render first line
         char line1[41];
@@ -115,9 +115,9 @@ static void draw_dialog_text(const char *text)
         if(len > 40) len = 40;
         for(uint8_t i = 0; i < len; i++) line1[i] = text[i];
         line1[len] = 0;
-        draw_text_opaque(4, 0, line1, COL_WHITE, COL_BLUE);
+        draw_text(4, 0, line1, COL_BLACK);
         // Render second line
-        draw_text_opaque(4, 8, nl + 1, COL_WHITE, COL_BLUE);
+        draw_text(4, 8, nl + 1, COL_BLACK);
     }
     render_text(DIALOG_TILE, 20);
 
@@ -169,7 +169,7 @@ void game_show_dialog(const char *text)
     }
 
     // Fill text_tiles with the background color (no text yet).
-    clear_text_tiles(COL_DARK_BLUE, 20);
+    clear_text_tiles(93, 20);
     set_font(FONT_FLAMBOYANT);
 
     // Wire and push only tile 0 so the box starts appearing without
@@ -512,7 +512,7 @@ void update_game(void)
                 py = 8;
             }
             char tmp[2] = {c, '\0'};
-            draw_text_opaque(px, py, tmp, COL_WHITE, COL_BLUE);
+            draw_text(px, py, tmp, COL_BLACK);
             // Upload only the 1-2 tiles this character's pixels touch.
             uint8_t first_tile = (uint8_t)(px >> 4);
             uint8_t last_tile  = (uint8_t)((px + 7) >> 4);

@@ -361,17 +361,19 @@ void draw_text_char(uint16_t x, uint8_t y, uint8_t c, uint8_t color)
         // Save some computation on the common case of aligned text by precomputing the offset and only checking tile bounds once.
         uint16_t offset = ((x>>4)<<8)+(y<<4)+(x&0x0F);
         const uint8_t *ptr = font+((c-32)<<3);
-        uint8_t mask=0x80;
-        for(uint8_t i=0;i<8;i++)
+        for(uint8_t j=0;j<8;j++)
         {
-            uint16_t offset2 = offset+i;
-            for(uint8_t j=0;j<8;j++)
+            uint8_t mask=0x80;
+            uint8_t ch=*ptr;
+            for(uint8_t i=0;i<8;i++)
             {
-                offset2 += 16;
-                if(ptr[j] & mask)
-                    draw_text_pixel_offset(offset2, color);
+                if(ch & mask)
+                    draw_text_pixel_offset(offset, color);
+                offset++;
+                mask>>=1;
             }
-            mask >>= 1;
+            ptr++;
+            offset+=8;
         }
     }
 }
