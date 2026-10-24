@@ -59,8 +59,11 @@ bool dat_open(void)
 {
     dat_fd = open("wsorrow.dat", O_RDONLY);
     if (dat_fd < 0) {
-        debug_log("dat: failed to open wsorrow.dat");
-        return false;
+        dat_fd = open("h:/bin/wsorrow.dat", O_RDONLY);
+        if (dat_fd < 0) {
+            debug_log("dat: failed to open wsorrow.dat");
+            return false;
+        }
     }
 
     // Read full header in one shot.

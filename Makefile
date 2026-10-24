@@ -3,8 +3,9 @@ ZVB_SDK_PATH ?= ../Zeal-VideoBoard-SDK
 BIN=bin/wyvern.bin
 OBJ=obj/main.rel obj/game.rel obj/menu.rel obj/world.rel obj/story.rel obj/dat.rel obj/map.rel obj/battle.rel
 DAT=bin/wsorrow.dat
+IMG=img/bosses.zts img/demonlord.zts img/enemies.zts img/npc_pc.zts img/terrain.zts
 CC=sdcc
-CFLAGS=-mz80 --std-c2x -c -I $(ZOS_PATH)/kernel_headers/sdcc/include/ -I $(ZVB_SDK_PATH)/include --codeseg TEXT --debug
+CFLAGS=-mz80 --std-c2x --opt-code-size -c -I $(ZOS_PATH)/kernel_headers/sdcc/include/ -I $(ZVB_SDK_PATH)/include --codeseg TEXT --debug
 AS=sdasz80 -o -l -s
 OBJCOPY=sdobjcopy
 LD=sdldz80
@@ -33,7 +34,7 @@ obj/%.rel: src/%.asm
 img/%.zts: img/%.gif
 	$(ZVB_SDK_PATH)/tools/zeal2gif/gif2zeal.py -z -i $<
 
-$(DAT): tools/dat_gen.py tools/story_editor/script.json img/*.zts img/*.ztp
+$(DAT): tools/dat_gen.py tools/story_editor/script.json $(IMG)
 	python3 tools/dat_gen.py
 
 obj/dat.rel: src/dat.c src/dat.h src/main.h
