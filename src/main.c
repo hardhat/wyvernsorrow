@@ -108,15 +108,19 @@ uint8_t handle_input(uint8_t key)
             return 0;
         case KB_KEY_W:
         case KB_UP_ARROW:
+        case KB_NUMPAD_8:
             return INPUT_UP;
         case KB_KEY_S:
         case KB_DOWN_ARROW:
+        case KB_NUMPAD_2:
             return INPUT_DOWN;
         case KB_KEY_A:
         case KB_LEFT_ARROW:
+        case KB_NUMPAD_4:
             return INPUT_LEFT;
         case KB_KEY_D:
         case KB_RIGHT_ARROW:
+        case KB_NUMPAD_6:
             return INPUT_RIGHT;
         case KB_KEY_V:
         case KB_KEY_SPACE:
